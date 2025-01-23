@@ -16,7 +16,7 @@ sensor:
     address: ${do_address}
     unit_of_measurement: "mg/L"
     accuracy_decimals: 2
-    update_interval: "never"
+    update_interval: never
     state_class: "measurement"
     # disabled_by_default: true
     on_custom: 
@@ -39,7 +39,7 @@ sensor:
     unit_of_measurement: "%"
     icon: mdi:gas-cylinder
     accuracy_decimals: 1
-    update_interval: "never"
+    update_interval: never
     state_class: "measurement"
     lambda: |-
       std::string str = id(do_raw_value).state;
