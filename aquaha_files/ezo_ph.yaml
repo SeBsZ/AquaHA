@@ -1,3 +1,11 @@
+interval:
+  - interval: "${ph_interval}"
+    then:
+      - lambda: |-
+          if (id(ph_module)) {
+            id(ph_read).press();
+          }
+
 sensor:
   - platform: ezo
     icon: mdi:ph
@@ -6,7 +14,7 @@ sensor:
     address: ${ph_address}
     unit_of_measurement: ""
     accuracy_decimals: 2
-    update_interval: "${ph_interval}"
+    update_interval: never
     state_class: "measurement"
     device_class: PH
     on_custom: 
