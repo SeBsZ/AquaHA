@@ -43,26 +43,79 @@ button:
             then:
               - lambda: |-
                   if (id(ph_module).state == 'true') {
-                    id(write_temp_comp_ph).press();
+                    byte error;
+                    Wire.beginTransmission(${ph_address});
+                    error = Wire.endTransmission();
+                    if (error == 0) {
+                      id(ph_ezo).set_t(id(temp1).state);
+                      ESP_LOGW("custom_ph_read", "Set pH temperature compensation.");
+                    }
+                    else {
+                      ESP_LOGW("custom_ph_read", "No pH sensor detected at address: ${ph_address}!");
+                    }
                   }
                   if (id(ec_module).state == 'true') {
-                    id(write_temp_comp_ec).press();
+                    byte error;
+                    Wire.beginTransmission(${ec_address});
+                    error = Wire.endTransmission();
+                    if (error == 0) {
+                      id(ec_ezo).set_t(id(temp1).state);
+                      ESP_LOGW("custom_conductivity_read", "Set EC temperature compensation.");
+                    }
+                    else {
+                      ESP_LOGW("custom_conductivity_read", "No Conductivity sensor detected at address: ${ec_address}!");
+                    }
                   }
                   if (id(do_module).state == 'true') {
-                    id(write_temp_comp_do).press();
+                    byte error;
+                    Wire.beginTransmission(${do_address});
+                    error = Wire.endTransmission();
+                    if (error == 0) {
+                      id(do_ezo).set_t(id(temp1).state);
+                      ESP_LOGW("custom_do_read", "Set DO temperature compensation.");
+                    }
+                    else {
+                      ESP_LOGW("custom_do_read", "No DO sensor detected at address: ${do_address}!");
+                    }
                   }
-        
   - platform: template
     id: reset_temp_comp
     internal: true
     on_press:
       - lambda: |-
           if (id(ph_module).state == 'true') {
-            id(reset_temp_comp_ph).press();
+            byte error;
+            Wire.beginTransmission(${ph_address});
+            error = Wire.endTransmission();
+            if (error == 0) {
+              id(ph_ezo).set_t(25.0);
+              ESP_LOGW("custom_ph_read", "Reset pH temperature compensation.");
+            }
+            else {
+              ESP_LOGW("custom_ph_read", "No pH sensor detected at address: ${ph_address}!");
+            }
           }
           if (id(ec_module).state == 'true') {
-            id(reset_temp_comp_ec).press();
+            byte error;
+            Wire.beginTransmission(${ec_address});
+            error = Wire.endTransmission();
+            if (error == 0) {
+              id(ec_ezo).set_t(25.0);
+              ESP_LOGW("custom_conductivity_read", "Reset EC temperature compensation.");
+            }
+            else {
+              ESP_LOGW("custom_conductivity_read", "No Conductivity sensor detected at address: ${ec_address}!");
+            }
           }
           if (id(do_module).state == 'true') {
-            id(reset_temp_comp_do).press();
+            byte error;
+            Wire.beginTransmission(${do_address});
+            error = Wire.endTransmission();
+            if (error == 0) {
+              id(do_ezo).set_t(25.0);
+              ESP_LOGW("custom_dissolvedoxygen_read", "Reset DO temperature compensation.");
+            }
+            else {
+              ESP_LOGW("custom_dissolvedoxygen_read", "No DO sensor detected at address: ${do_address}!");
+            }
           }
