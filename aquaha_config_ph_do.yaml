@@ -19,19 +19,19 @@ globals:
   - id: ph_module
     type: bool
     restore_value: no
-    initial_value: true
+    initial_value: 'true'
   - id: ec_module
     type: bool
     restore_value: no
-    initial_value: false
+    initial_value: 'false'
   - id: do_module
     type: bool
     restore_value: no
-    initial_value: true
+    initial_value: 'true'
   - id: orp_module
     type: bool
     restore_value: no
-    initial_value: false
+    initial_value: 'false'
 
 esphome:
   min_version: 2024.6.0
