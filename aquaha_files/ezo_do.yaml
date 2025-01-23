@@ -1,7 +1,10 @@
 interval:
   - interval: "${do_interval}"
     then:
-      - button.press: do_read
+      - lambda: |-
+          if (id(do_module).state == 'true') {
+            id(do_read).press();
+          }
 
 sensor:
   # Dissolved Oxygen mg/L
@@ -12,7 +15,7 @@ sensor:
     address: ${do_address}
     unit_of_measurement: "mg/L"
     accuracy_decimals: 2
-    update_interval: "${update_do}"
+    update_interval: "never"
     state_class: "measurement"
     # disabled_by_default: true
     on_custom: 
