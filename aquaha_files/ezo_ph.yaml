@@ -50,31 +50,6 @@ sensor:
           window_size: 5
           send_every: 1
           send_first_at: 1
-  - platform: template
-    id: ph_avg_hyst
-    icon: mdi:ph
-    name: "pH avg hysteresis"
-    state_class: "measurement"
-    device_class: PH
-    accuracy_decimals: 1
-    lambda: |-
-      static float last_displayed_value = NAN;
-      static const float hysteresis_threshold = 0.2;
-      // Smooth the raw pH with a moving average over the last 10 readings
-      float smoothed_value = id(ph_ezo).state;
-      
-      // Check if the difference from the last displayed value is beyond the threshold
-      if (isnan(last_displayed_value) || abs(smoothed_value - last_displayed_value) > hysteresis_threshold) {
-        last_displayed_value = smoothed_value;
-      }
-      
-      // Round to one decimal place and return
-      return roundf(last_displayed_value * 10.0) / 10.0;
-    filters:
-      # Apply a moving average over a window of 10 readings
-      - sliding_window_moving_average:
-          window_size: 10
-          send_every: 1  # Update every time, but based on the moving average
 
 text_sensor:
   - platform: template
