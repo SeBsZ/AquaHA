@@ -1,7 +1,3 @@
-substitutions:
-  ph_address: "99"
-  ph_interval: "60s"
-
 sensor:
   - platform: ezo
     icon: mdi:ph
