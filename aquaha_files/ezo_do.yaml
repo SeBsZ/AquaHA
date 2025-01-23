@@ -4,6 +4,7 @@ interval:
       - lambda: |-
           if (id(do_module).state == 'true') {
             id(do_read).press();
+            id(sensor_do_percent).update();
           }
 
 sensor:
@@ -38,7 +39,7 @@ sensor:
     unit_of_measurement: "%"
     icon: mdi:gas-cylinder
     accuracy_decimals: 1
-    update_interval: "${update_do}"
+    update_interval: "never"
     state_class: "measurement"
     lambda: |-
       std::string str = id(do_raw_value).state;
