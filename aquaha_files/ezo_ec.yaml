@@ -1,7 +1,3 @@
-substitutions:
-  ec_address: "100"
-  ec_interval: "60s"
-
 interval:
   - interval: "${ec_interval}"
     then:
