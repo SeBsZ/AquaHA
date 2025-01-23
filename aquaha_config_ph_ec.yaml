@@ -8,8 +8,8 @@ packages:
   alarms: !include aquaha_files/alarms.yaml
   ds18b20: !include aquaha_files/ds18b20.yaml
   ezo_ph: !include aquaha_files/ezo_ph.yaml
-  #ezo_ec: !include aquaha_files/ezo_ec.yaml
-  ezo_do: !include aquaha_files/ezo_do.yaml
+  ezo_ec: !include aquaha_files/ezo_ec.yaml
+  #ezo_do: !include aquaha_files/ezo_do.yaml
   heating: !include aquaha_files/heating.yaml
   lights: !include aquaha_files/lights.yaml
   time_scheduler: !include aquaha_files/time_scheduler.yaml
@@ -23,11 +23,11 @@ globals:
   - id: ec_module
     type: bool
     restore_value: no
-    initial_value: false
+    initial_value: true
   - id: do_module
     type: bool
     restore_value: no
-    initial_value: true
+    initial_value: false
   - id: orp_module
     type: bool
     restore_value: no

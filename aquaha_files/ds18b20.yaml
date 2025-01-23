@@ -18,7 +18,7 @@ sensor:
           condition: 
             - sensor.in_range:
                 id: temp1
-                above: 10.0
+                above: 0.5
             - switch.is_on: enable_temperature_compensation
           then:
             - button.press: write_temp_comp
@@ -34,86 +34,35 @@ button:
     internal: true
     on_press:
       then:
-        - lambda: |-
-            byte error;
-            Wire.beginTransmission(${ec_address});
-            error = Wire.endTransmission();
-            if (error == 0) {
-              id(ec_ezo).set_t(id(temp1).state);
-            }
-            else {
-              ESP_LOGW("custom_conductivity_read", "No Conductivity sensor detected at address: ${ec_address}!");
-            }
-        - logger.log:
-            format: "Setting EC temp compensation to %.1f"
-            args: ["id(temp1).state"]
-        - lambda: |-
-            byte error;
-            Wire.beginTransmission(${ph_address});
-            error = Wire.endTransmission();
-            if (error == 0) {
-              id(ph_ezo).set_t(id(temp1).state);
-            }
-            else {
-              ESP_LOGW("custom_ph_read", "No pH sensor detected at address: ${ph_address}!");
-            }
-        - logger.log:
-            format: "Setting pH temp compensation to %.1f"
-            args: ["id(temp1).state"]
-        - lambda: |-
-            byte error;
-            Wire.beginTransmission(${do_address});
-            error = Wire.endTransmission();
-            if (error == 0) {
-              id(do_ezo).set_t(id(temp1).state);
-            }
-            else {
-              ESP_LOGW("custom_do_read", "No DO sensor detected at address: ${do_address}!");
-            }
-        - logger.log:
-            format: "Setting DO temp compensation to %.1f"
-            args: ["id(temp1).state"]
+        - if:
+          condition: 
+            - sensor.in_range:
+                id: temp1
+                above: 0.5
+            - switch.is_on: enable_temperature_compensation
+          then:
+            - lambda: |-
+                if (id(ph_module)) {
+                  id(write_temp_comp_ph).press();
+                }
+                if (id(ec_module)) {
+                  id(write_temp_comp_ec).press();
+                }
+                if (id(do_module)) {
+                  id(write_temp_comp_do).press();
+                }
+        
   - platform: template
     id: reset_temp_comp
     internal: true
     on_press:
-      then:
-        - lambda: |-
-            byte error;
-            Wire.beginTransmission(${ec_address});
-            error = Wire.endTransmission();
-            if (error == 0) {
-              id(ec_ezo).set_t(25.0);
-            }
-            else {
-              ESP_LOGW("custom_conductivity_read", "No Conductivity sensor detected at address: ${ec_address}!");
-            }
-        - logger.log:
-            format: "Setting EC temp compensation to %.1f"
-            args: ["25.0"]
-        - lambda: |-
-            byte error;
-            Wire.beginTransmission(${ph_address});
-            error = Wire.endTransmission();
-            if (error == 0) {
-              id(ph_ezo).set_t(25.0);
-            }
-            else {
-              ESP_LOGW("custom_conductivity_read", "No pH sensor detected at address: ${ph_address}!");
-            }
-        - logger.log:
-            format: "Setting pH temp compensation to %.1f"
-            args: ["25.0"]
-        - lambda: |-
-            byte error;
-            Wire.beginTransmission(${do_address});
-            error = Wire.endTransmission();
-            if (error == 0) {
-              id(do_ezo).set_t(25.0);
-            }
-            else {
-              ESP_LOGW("custom_dissolvedoxygen_read", "No DO sensor detected at address: ${do_address}!");
-            }
-        - logger.log:
-            format: "Setting DO temp compensation to %.1f"
-            args: ["25.0"]
+      - lambda: |-
+          if (id(ph_module)) {
+            id(reset_temp_comp_ph).press();
+          }
+          if (id(ec_module)) {
+            id(reset_temp_comp_ec).press();
+          }
+          if (id(do_module)) {
+            id(reset_temp_comp_do).press();
+          }

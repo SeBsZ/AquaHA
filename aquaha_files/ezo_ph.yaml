@@ -88,7 +88,42 @@ button:
       then:
         - lambda: |-
             id(ph_ezo).send_custom("R");
-
+  - platform: template
+    id: write_temp_comp_ph
+    internal: true
+    on_press:
+      then:
+        - lambda: |-
+            byte error;
+            Wire.beginTransmission(${ph_address});
+            error = Wire.endTransmission();
+            if (error == 0) {
+              id(ph_ezo).set_t(id(temp1).state);
+            }
+            else {
+              ESP_LOGW("custom_ph_read", "No pH sensor detected at address: ${ph_address}!");
+            }
+        - logger.log:
+            format: "Setting pH temp compensation to %.1f"
+            args: ["id(temp1).state"]
+  - platform: template
+    id: reset_temp_comp_ph
+    internal: true
+    on_press:
+      then:
+        - lambda: |-
+            byte error;
+            Wire.beginTransmission(${ph_address});
+            error = Wire.endTransmission();
+            if (error == 0) {
+              id(ph_ezo).set_t(25.0);
+            }
+            else {
+              ESP_LOGW("custom_conductivity_read", "No pH sensor detected at address: ${ph_address}!");
+            }
+        - logger.log:
+            format: "Setting pH temp compensation to %.1f"
+            args: ["25.0"]
   - platform: template
     name: pH - Send command
     id: ph_send_command
