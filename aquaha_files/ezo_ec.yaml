@@ -2,7 +2,7 @@ interval:
   - interval: "${ec_interval}"
     then:
       - lambda: |-
-          if (id(do_module)) {
+          if (id(ec_module)) {
             id(ec_read).press();
           }
 
