@@ -455,6 +455,7 @@ text_sensor:
     id: current_time
     update_interval: 60s
     lambda: return  id(sntp_time).now().strftime("%H:%M:%S");
+    disabled_by_default: true
 
 interval:
 - interval: 60s
