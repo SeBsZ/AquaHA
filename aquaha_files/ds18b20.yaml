@@ -42,13 +42,13 @@ button:
               - switch.is_on: enable_temperature_compensation
             then:
               - lambda: |-
-                  if (id(ph_module)) {
+                  if (id(ph_module).state == 'true') {
                     id(write_temp_comp_ph).press();
                   }
-                  if (id(ec_module)) {
+                  if (id(ec_module).state == 'true') {
                     id(write_temp_comp_ec).press();
                   }
-                  if (id(do_module)) {
+                  if (id(do_module).state == 'true') {
                     id(write_temp_comp_do).press();
                   }
         
@@ -57,12 +57,12 @@ button:
     internal: true
     on_press:
       - lambda: |-
-          if (id(ph_module)) {
+          if (id(ph_module).state == 'true') {
             id(reset_temp_comp_ph).press();
           }
-          if (id(ec_module)) {
+          if (id(ec_module).state == 'true') {
             id(reset_temp_comp_ec).press();
           }
-          if (id(do_module)) {
+          if (id(do_module).state == 'true') {
             id(reset_temp_comp_do).press();
           }
