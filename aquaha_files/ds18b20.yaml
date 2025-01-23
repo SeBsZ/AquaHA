@@ -25,7 +25,7 @@ sensor:
   - platform: dallas_temp
     name: temp2
     id: temp2
-    update_interval: "${update_ec}"
+    update_interval: "${ec_update}"
     one_wire_id: one_wire_2
 
 button:
