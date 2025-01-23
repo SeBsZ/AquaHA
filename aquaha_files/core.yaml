@@ -1,3 +1,11 @@
+substitutions:
+  ph_address: "99"
+  ph_interval: "60s"
+  do_address: "97"
+  do_interval: "60s"
+  ec_address: "100"
+  ec_interval: "60s"
+
 switch:
   - platform: gpio
     id: disable_iso
