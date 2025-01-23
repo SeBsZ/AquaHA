@@ -35,22 +35,22 @@ button:
     on_press:
       then:
         - if:
-          condition: 
-            - sensor.in_range:
-                id: temp1
-                above: 0.5
-            - switch.is_on: enable_temperature_compensation
-          then:
-            - lambda: |-
-                if (id(ph_module)) {
-                  id(write_temp_comp_ph).press();
-                }
-                if (id(ec_module)) {
-                  id(write_temp_comp_ec).press();
-                }
-                if (id(do_module)) {
-                  id(write_temp_comp_do).press();
-                }
+            condition: 
+              - sensor.in_range:
+                  id: temp1
+                  above: 0.5
+              - switch.is_on: enable_temperature_compensation
+            then:
+              - lambda: |-
+                  if (id(ph_module)) {
+                    id(write_temp_comp_ph).press();
+                  }
+                  if (id(ec_module)) {
+                    id(write_temp_comp_ec).press();
+                  }
+                  if (id(do_module)) {
+                    id(write_temp_comp_do).press();
+                  }
         
   - platform: template
     id: reset_temp_comp
