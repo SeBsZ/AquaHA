@@ -10,7 +10,7 @@ sensor:
   - platform: dallas_temp
     name: temp1
     id: temp1
-    update_interval: "${update_ec}"
+    update_interval: "${ec_update}"
     one_wire_id: one_wire_1
     on_value:
       then:
