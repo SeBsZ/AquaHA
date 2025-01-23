@@ -1,7 +1,10 @@
 interval:
   - interval: "${ec_interval}"
     then:
-      - button.press: ec_read
+      - lambda: |-
+          if (id(do_module).state == 'true') {
+            id(ec_read).press();
+          }
 
 sensor:
   - platform: ezo
