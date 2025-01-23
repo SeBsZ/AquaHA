@@ -1,0 +1,66 @@
+switch:
+  - platform: gpio
+    pin: GPIO13
+    id: heater1
+    internal: True
+    on_turn_on:
+      - binary_sensor.template.publish:
+          id: heater1_state
+          state: ON
+    on_turn_off:
+      - binary_sensor.template.publish:
+          id: heater1_state
+          state: OFF
+  - platform: gpio
+    pin: GPIO14
+    id: heater2
+    internal: True
+    on_turn_on:
+      - binary_sensor.template.publish:
+          id: heater2_state
+          state: ON
+    on_turn_off:
+      - binary_sensor.template.publish:
+          id: heater2_state
+          state: OFF
+  - platform: gpio
+    pin: GPIO25
+    id: relay3
+    internal: True
+  - platform: gpio
+    pin: GPIO16
+    id: relay4
+    internal: True
+
+binary_sensor:
+  - platform: template
+    name: "Heater 1"
+    id: "heater1_state"
+  - platform: template
+    name: "Heater 2"
+    id: "heater2_state"
+
+climate:
+  - platform: thermostat
+    name: "Thermostat"
+    sensor: temp1
+    heat_deadband: 0.1
+    heat_overrun: 0.1
+    min_heating_off_time: 60s
+    min_heating_run_time: 60s
+    min_idle_time: 60s
+    heat_action:
+      - switch.turn_on: heater1
+    supplemental_heating_action:
+      - switch.turn_on: heater2
+    max_heating_run_time: 24h
+    supplemental_heating_delta: 1.0
+    idle_action:
+      - switch.turn_off: heater1
+      - switch.turn_off: heater2
+    default_preset: Default
+    preset:
+      - name: Default
+        default_target_temperature_low: 24.5 °C
+
+    

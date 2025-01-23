@@ -1,0 +1,55 @@
+output:
+  - platform: ledc
+    id: pwm1_out
+    pin: GPIO26
+    frequency: 2441hz
+    min_power: 0.006
+    zero_means_zero: true
+    channel: 0
+  - platform: ledc
+    id: pwm2_out
+    pin: GPIO27
+    frequency: 2441hz
+    min_power: 0.006
+    zero_means_zero: true
+    channel: 2
+  - platform: ledc
+    id: pwm3_out
+    pin: GPIO32
+    min_power: 0.006
+    zero_means_zero: true
+    frequency: 2441hz
+    channel: 4
+  - platform: ledc
+    id: pwm4_out
+    pin: GPIO33
+    min_power: 0.006
+    zero_means_zero: true
+    frequency: 2441hz
+    channel: 6
+
+light:
+  - platform: monochromatic
+    id: led_output_1
+    output: pwm1_out
+    name: "LED bar 1"
+    gamma_correct: 2.8
+    restore_mode: RESTORE_DEFAULT_OFF 
+  - platform: monochromatic
+    id: led_output_2
+    output: pwm2_out
+    name: "LED bar 2"
+    gamma_correct: 2.8
+    restore_mode: RESTORE_DEFAULT_OFF 
+  - platform: monochromatic
+    id: led_output_3
+    output: pwm3_out
+    name: "LED bar 3"
+    gamma_correct: 2.8
+    restore_mode: RESTORE_DEFAULT_OFF 
+  - platform: monochromatic
+    id: led_output_4
+    output: pwm4_out
+    name: "LED bar 4"
+    gamma_correct: 2.8
+    restore_mode: RESTORE_DEFAULT_OFF

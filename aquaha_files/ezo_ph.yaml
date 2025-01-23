@@ -1,0 +1,136 @@
+substitutions:
+  ph_address: "99"
+  ph_interval: "60s"
+
+sensor:
+  - platform: ezo
+    icon: mdi:ph
+    name: "pH"
+    id: ph_ezo
+    address: ${ph_address}
+    unit_of_measurement: ""
+    accuracy_decimals: 2
+    update_interval: "${ph_interval}"
+    state_class: "measurement"
+    device_class: PH
+    on_custom: 
+      then:
+        - lambda: 
+            id(ph_result).publish_state(x);
+    on_calibration: 
+      then:
+        - lambda: 
+            id(ph_result).publish_state(x);
+    on_device_information: 
+      then:
+        - lambda: 
+            id(ph_result).publish_state(x);
+    on_slope: 
+      then:
+        - lambda: 
+            id(ph_result).publish_state(x);
+    on_t: 
+      then:
+        - lambda: 
+            id(ph_result).publish_state(x); 
+  - platform: copy
+    source_id: ph_ezo
+    id: ph_avg
+    icon: mdi:ph
+    name: "pH avg"
+    state_class: "measurement"
+    device_class: PH
+    accuracy_decimals: 2
+    filters:
+      - sliding_window_moving_average: 
+          window_size: 5
+          send_every: 1
+          send_first_at: 1
+  - platform: template
+    id: ph_avg_hyst
+    icon: mdi:ph
+    name: "pH avg hysteresis"
+    state_class: "measurement"
+    device_class: PH
+    accuracy_decimals: 1
+    lambda: |-
+      static float last_displayed_value = NAN;
+      static const float hysteresis_threshold = 0.2;
+      // Smooth the raw pH with a moving average over the last 10 readings
+      float smoothed_value = id(ph_ezo).state;
+      
+      // Check if the difference from the last displayed value is beyond the threshold
+      if (isnan(last_displayed_value) || abs(smoothed_value - last_displayed_value) > hysteresis_threshold) {
+        last_displayed_value = smoothed_value;
+      }
+      
+      // Round to one decimal place and return
+      return roundf(last_displayed_value * 10.0) / 10.0;
+    filters:
+      # Apply a moving average over a window of 10 readings
+      - sliding_window_moving_average:
+          window_size: 10
+          send_every: 1  # Update every time, but based on the moving average
+
+text_sensor:
+  - platform: template
+    name: pH - Result
+    id: ph_result
+    # disabled_by_default: true
+
+button:
+  - platform: template
+    name: pH - Take reading
+    id: ph_read
+    icon: mdi:read
+    entity_category: "Config"
+    on_press:
+      then:
+        - lambda: |-
+            id(ph_ezo).send_custom("R");
+
+  - platform: template
+    name: pH - Send command
+    id: ph_send_command
+    entity_category: "Config"
+    on_press:
+      then:
+        - lambda: |-
+            if (id(ph_select_command).state == "Read") {
+              id(ph_ezo).send_custom("R");
+            }
+            if (id(ph_select_command).state == "Information") {
+              id(ph_ezo).get_device_information();
+            }
+            if (id(ph_select_command).state == "Status") {
+              id(ph_ezo).send_custom("Status");
+            }
+            if (id(ph_select_command).state == "Get Slope") {
+              id(ph_ezo).get_slope();
+            }
+            if (id(ph_select_command).state == "Check Calibration") {
+              id(ph_ezo).get_calibration();
+            }  
+            if (id(ph_select_command).state == "CLEAR Calibration") {
+              id(ph_ezo).clear_calibration();
+            }
+
+select:
+  - platform: template
+    name: pH Select Command
+    id: ph_select_command
+    optimistic: true
+    # disabled_by_default: true
+    entity_category: "Config"
+    options:
+      - "Read"
+      - "Information"
+      - "Status"
+      - "Get Slope"
+      - "Check Calibration"
+      - "CLEAR Calibration"
+    initial_option: "Check Calibration"
+    set_action:
+      - logger.log:
+          format: "Chosen option: %s"
+          args: ["x.c_str()"]

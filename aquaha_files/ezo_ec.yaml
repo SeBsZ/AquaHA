@@ -1,0 +1,325 @@
+substitutions:
+  ec_address: "100"
+  ec_interval: "60s"
+
+interval:
+  - interval: "${ec_interval}"
+    then:
+      - button.press: ec_read
+
+sensor:
+  - platform: ezo
+    icon: mdi:shaker-outline
+    name: "EC-EZO"
+    id: ec_ezo
+    address: ${ec_address}
+    unit_of_measurement: "mS/cm"
+    accuracy_decimals: 2
+    update_interval: never
+    state_class: "measurement"
+    device_class: "volatile_organic_compounds_parts"
+    internal: True
+    filters:
+      - lambda:
+          return (x / 1000);
+    on_custom: 
+      then:
+        - lambda: 
+            id(ec_raw_value).publish_state(x);
+    on_calibration: 
+      then:
+        - lambda: 
+            id(ec_result).publish_state(x);
+    on_device_information: 
+      then:
+        - lambda: 
+            id(ec_result).publish_state(x);
+    on_slope: 
+      then:
+        - lambda: 
+            id(ec_result).publish_state(x);
+    on_t: 
+      then:
+        - lambda: 
+            id(ec_result).publish_state(x);
+  # Conductivity
+  - platform: template
+    id: sensor_conductivity
+    unit_of_measurement: "mS/cm"
+    icon: mdi:shaker-outline
+    name: "Conductivity"
+    accuracy_decimals: 2
+    update_interval: never 
+    state_class: "measurement"
+    device_class: "volatile_organic_compounds_parts"
+    lambda: |-
+      std::string str = id(ec_raw_value).state;
+      std::vector<std::string> v;
+      char * token;
+      char seps[] = ",";
+      token = strtok (&str[0],seps);
+      while (token != NULL) {
+        v.push_back(token);
+        token = strtok (NULL, seps);
+      }
+      if (v.size() == 4) {
+        return (std::stof(v[0]) / 1000);
+      } 
+      else {
+        return NAN;
+      }
+
+  # TDS
+  - platform: template
+    name: TDS
+    id: sensor_tds
+    unit_of_measurement: "g/L"
+    icon: mdi:water-opacity
+    accuracy_decimals: 2
+    disabled_by_default: true
+    update_interval: never 
+    state_class: "measurement"
+    device_class: "volatile_organic_compounds_parts"
+    lambda: |-
+      std::string str = id(ec_raw_value).state;
+      std::vector<std::string> v;
+      char * token;
+      char seps[] = ",";
+      token = strtok (&str[0],seps);
+      while (token != NULL) {
+        v.push_back(token);
+        token = strtok (NULL, seps);
+      }
+      if (v.size() == 4) {
+        return (std::stof(v[1]) / 1000);
+      } 
+      else {
+        return NAN;
+      }
+
+  # Salinity
+  - platform: template
+    name: Salinity
+    id: sensor_salinity
+    icon: mdi:shaker-outline
+    unit_of_measurement: "ppt"
+    accuracy_decimals: 2
+    update_interval: never 
+    state_class: "measurement"
+    device_class: "volatile_organic_compounds_parts"
+    lambda: |-
+      std::string str = id(ec_raw_value).state;
+      std::vector<std::string> v;
+      char * token;
+      char seps[] = ",";
+      token = strtok (&str[0],seps);
+      while (token != NULL) {
+        v.push_back(token);
+        token = strtok (NULL, seps);
+      }
+      if (v.size() == 4) {
+        return std::stof(v[2]);
+      } 
+      else {
+        return NAN;
+      }
+  - platform: copy
+    source_id: sensor_salinity
+    id: sensor_salinity_avg
+    icon: mdi:shaker-outline
+    name: "Salinity avg"
+    unit_of_measurement: "ppt"
+    accuracy_decimals: 2
+    device_class: "volatile_organic_compounds_parts"
+    state_class: "measurement"
+    filters:
+      - sliding_window_moving_average: 
+          window_size: 5
+          send_every: 1
+          send_first_at: 1
+  # Specific Gravity
+  - platform: template
+    name: Specific Gravity
+    id: sensor_specific_gravity
+    icon: mdi:cup-water
+    unit_of_measurement: ""
+    accuracy_decimals: 3
+    update_interval: never
+    state_class: "measurement"
+    device_class: "volatile_organic_compounds_parts"
+    lambda: |-
+      std::string str = id(ec_raw_value).state;
+      std::vector<std::string> v;
+      char * token;
+      char seps[] = ",";
+      token = strtok (&str[0],seps);
+      while (token != NULL) {
+        v.push_back(token);
+        token = strtok (NULL, seps);
+      }
+      if (v.size() == 4) {
+        return std::stof(v[3]);
+      } 
+      else {
+        return NAN;
+      }
+  - platform: copy
+    name: Specific Gravity 1k
+    source_id: sensor_specific_gravity
+    id: sensor_specific_gravity_1000
+    accuracy_decimals: 0
+    filters:
+      - multiply: 1000
+
+text_sensor:
+  - platform: template
+    name: EC - Raw
+    id: ec_raw_value
+    icon: mdi:counter
+    disabled_by_default: true
+    on_value: 
+      then:
+        - component.update: sensor_salinity
+        - component.update: sensor_conductivity
+        - component.update: sensor_tds
+        - component.update: sensor_specific_gravity
+  - platform: template
+    name: EC - Result
+    icon: mdi:data-matrix
+    id: ec_result
+    # disabled_by_default: true
+
+button:
+  # Read Conductivity Probe
+  - platform: template
+    name: EC - Take reading
+    icon: mdi:read
+    id: ec_read
+    entity_category: "Config"
+    # disabled_by_default: true
+    on_press:
+      then:
+        - lambda: |-
+            id(ec_ezo).send_custom("R");
+
+  # Send Selected EZO Command - Conductivity
+  - platform: template
+    name: EC - Command Send Selected
+    id: ec_send_selected
+    entity_category: "Config"
+    # disabled_by_default: true
+    on_press:
+      then:
+        - lambda: |-
+            if (id(select_command_ec).state == "Read") {
+              id(ec_ezo).send_custom("R");
+            }
+            if (id(select_command_ec).state == "Information") {
+              id(ec_ezo).get_device_information();
+            }
+            if (id(select_command_ec).state == "Status") {
+              id(ec_ezo).send_custom("Status");
+            }
+            if (id(select_command_ec).state == "Get Probe K Value") {
+              id(ec_ezo).send_custom("K,?");
+            }  
+            if (id(select_command_ec).state == "Get TDS Value") {
+              id(ec_ezo).send_custom("TDS,?");
+            }
+            if (id(select_command_ec).state == "Set TDS Value to NaCl - 0.48") {
+              id(ec_ezo).send_custom("TDS,0.48");
+            }
+            if (id(select_command_ec).state == "Get Enabled Parameter(s)") {
+              id(ec_ezo).send_custom("O,?");
+            }  
+            if (id(select_command_ec).state == "Set Probe Type K1") {
+              id(ec_ezo).send_custom("K,1");
+            }
+            if (id(select_command_ec).state == "Output Units - All (Default)") {
+              id(ec_ezo).send_custom("O,EC,1");
+              id(ec_ezo).send_custom("O,TDS,1");
+              id(ec_ezo).send_custom("O,S,1");
+              id(ec_ezo).send_custom("O,SG,1");
+            }
+            if (id(select_command_ec).state == "Output Units - Conductivity") {
+              id(ec_ezo).send_custom("O,EC,1");
+              id(ec_ezo).send_custom("O,TDS,0");
+              id(ec_ezo).send_custom("O,S,0");
+              id(ec_ezo).send_custom("O,SG,0");
+            }
+            if (id(select_command_ec).state == "Salinity") {
+              id(ec_ezo).send_custom("O,EC,0");
+              id(ec_ezo).send_custom("O,TDS,0");
+              id(ec_ezo).send_custom("O,S,1");
+              id(ec_ezo).send_custom("O,SG,0");
+            }
+            if (id(select_command_ec).state == "Output Units - Specific Gravity") {
+              id(ec_ezo).send_custom("O,EC,0");
+              id(ec_ezo).send_custom("O,TDS,0");
+              id(ec_ezo).send_custom("O,S,0");
+              id(ec_ezo).send_custom("O,SG,1");
+            }
+            if (id(select_command_ec).state == "Output Units - TDS") {
+              id(ec_ezo).send_custom("O,EC,0");
+              id(ec_ezo).send_custom("O,TDS,1");
+              id(ec_ezo).send_custom("O,S,0");
+              id(ec_ezo).send_custom("O,SG,0");
+            }
+            if (id(select_command_ec).state == "Check Calibration") {
+              id(ec_ezo).get_calibration();
+            }  
+            if (id(select_command_ec).state == "Calibrate @ DRY (WILL RESET CALIBRATION)") {
+              id(ec_ezo).send_custom("Cal,dry");
+            }
+            if (id(select_command_ec).state == "Calibrate @ LOW = 8959 (WILL RESET CALIBRATION)") {
+              id(ec_ezo).send_custom("Cal,low,8959");
+            }
+            if (id(select_command_ec).state == "Calibrate @ LOW = 12880 (WILL RESET CALIBRATION)") {
+              id(ec_ezo).send_custom("Cal,low,12880");
+            }
+            if (id(select_command_ec).state == "Calibrate @ HIGH = 49131 (WILL RESET CALIBRATION)") {
+              id(ec_ezo).send_custom("Cal,high,49131");
+            }
+            if (id(select_command_ec).state == "Calibrate @ HIGH = 111800 (WILL RESET CALIBRATION)") {
+              id(ec_ezo).send_custom("Cal,high,111800");
+            }
+            if (id(select_command_ec).state == "Calibrate CLEAR (WILL RESET CALIBRATION)") {
+              id(ec_ezo).clear_calibration();
+            }
+            // else {
+            //   id(ec_ezo).send_custom("R");
+            // }
+
+select:
+  - platform: template
+    name: EC - Command Select
+    id: select_command_ec
+    # disabled_by_default: true
+    optimistic: true
+    entity_category: "Config"
+    options:
+      - "Read"
+      - "Information"
+      - "Status"
+      - "Get Probe K Value"
+      - "Get TDS Value"
+      - "Set TDS Value to NaCl - 0.48"
+      - "Get Enabled Parameter(s)"
+      - "Set Probe Type K1"
+      - "Output Units - All (Default)"
+      - "Output Units - Conductivity"
+      - "Output Units - Salinity"
+      - "Output Units - Specific Gravity"
+      - "Output Units - TDS"
+      - "Check Calibration"
+      - "Calibrate @ DRY (WILL RESET CALIBRATION)"
+      - "Calibrate @ LOW = 8959 (WILL RESET CALIBRATION)"
+      - "Calibrate @ LOW = 12880 (WILL RESET CALIBRATION)"
+      - "Calibrate @ HIGH = 49131 (WILL RESET CALIBRATION)"
+      - "Calibrate @ HIGH = 111800 (WILL RESET CALIBRATION)"
+      - "Calibrate CLEAR (WILL RESET CALIBRATION)"
+    initial_option: "Check Calibration"
+    set_action:
+      - logger.log:
+          format: "Chosen option: %s"
+          args: ["x.c_str()"]

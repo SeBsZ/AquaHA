@@ -1,0 +1,38 @@
+substitutions:
+  name: "aquaha"
+  friendly_name: "AquaHA"
+  app_version: "1.0.0"
+
+esphome:
+  min_version: 2024.6.0
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  name_add_mac_suffix: true
+  comment: "AquaHA - Aquarium Controller for Home Assistant"
+  project:
+    name: "sebsz.aquaha"
+    version: "${app_version}"
+
+esp32:
+  board: nodemcu-32s
+  framework:
+    type: arduino
+
+api:
+
+ota:
+  platform: esphome
+
+logger:
+  level: "DEBUG"
+
+# This should point to the public location of this yaml file.
+dashboard_import:
+  package_import_url: github://SeBsZ/AquaHA/aquaha_config_ph_do.yaml@main # change this to the correct modules
+  import_full_config: false # or true
+
+wifi:
+  ap:
+    password: "aquaHAaquaHA"
+
+captive_portal:

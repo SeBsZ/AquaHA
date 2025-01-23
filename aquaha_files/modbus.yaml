@@ -1,0 +1,14 @@
+uart:
+  tx_pin: GPIO1
+  rx_pin: GPIO3
+  baud_rate: 9600
+
+modbus:
+  flow_control_pin: GPIO19
+  id: modbus1
+
+modbus_controller:
+- id: modbus_device
+  address: 0x1   ## address of the Modbus slave device on the bus
+  modbus_id: modbus1
+  setup_priority: -10

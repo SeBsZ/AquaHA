@@ -1,0 +1,179 @@
+substitutions:
+  do_address: "97"
+  do_interval: "60s"
+
+interval:
+  - interval: "${do_interval}"
+    then:
+      - button.press: do_read
+
+sensor:
+  # Dissolved Oxygen mg/L
+  - platform: ezo
+    icon: mdi:gas-cylinder
+    name: "Dissolved Oxygen"
+    id: do_ezo
+    address: ${do_address}
+    unit_of_measurement: "mg/L"
+    accuracy_decimals: 2
+    update_interval: "${update_do}"
+    state_class: "measurement"
+    # disabled_by_default: true
+    on_custom: 
+      then:
+        - lambda: 
+            id(do_raw_value).publish_state(x);
+    on_calibration: 
+      then:
+        - lambda: 
+            id(do_result).publish_state(x);
+    on_device_information: 
+      then:
+        - lambda: 
+            id(do_result).publish_state(x);
+
+  # Dissolved Oxygen % Saturation
+  - platform: template
+    name: "Dissolved Oxygen % Saturation"
+    id: sensor_do_percent
+    unit_of_measurement: "%"
+    icon: mdi:gas-cylinder
+    accuracy_decimals: 1
+    update_interval: "${update_do}"
+    state_class: "measurement"
+    lambda: |-
+      std::string str = id(do_raw_value).state;
+      std::vector<std::string> v;
+      char * token;
+      char seps[] = ",";
+      token = strtok (&str[0],seps);
+      while (token != NULL) {
+        v.push_back(token);
+        token = strtok (NULL, seps);
+      }
+      if (v.size() == 2) {
+        return (std::stof(v[1]));
+      } 
+      else {
+        return NAN;
+      }
+  - platform: copy
+    source_id: do_ezo
+    id: do_avg
+    icon: mdi:gas-cylinder
+    name: "Dissolved Oxygen Average"
+    state_class: "measurement"
+    unit_of_measurement: "mg/L"
+    accuracy_decimals: 2
+    filters:
+      - sliding_window_moving_average: 
+          window_size: 5
+          send_every: 1
+          send_first_at: 1
+
+text_sensor:
+  - platform: template
+    name: DO - Raw
+    id: do_raw_value
+    icon: mdi:counter
+    disabled_by_default: true
+    on_value: 
+      then:
+        - component.update: do_ezo
+        - component.update: sensor_do_percent
+  - platform: template
+    name: DO - Result
+    icon: mdi:data-matrix
+    id: do_result
+    # disabled_by_default: true
+
+button:
+  - platform: template
+    name: DO - Take reading
+    id: do_read
+    icon: mdi:read
+    entity_category: "Config"
+    on_press:
+      then:
+        - lambda: |-
+            id(do_ezo).send_custom("R");
+
+  - platform: template
+    name: DO - Send command
+    id: do_send_command
+    entity_category: "Config"
+    on_press:
+      then:
+        - lambda: |-
+            if (id(do_select_command).state == "Read") {
+              id(do_ezo).send_custom("R");
+            }
+            if (id(do_select_command).state == "Information") {
+              id(do_ezo).get_device_information();
+            }
+            if (id(do_select_command).state == "Status") {
+              id(do_ezo).send_custom("Status");
+            }
+            if (id(do_select_command).state == "Get Enabled Parameter(s)") {
+              id(do_ezo).send_custom("O,?");
+            }  
+            if (id(do_select_command).state == "Output Units - All (Default)") {
+              id(do_ezo).send_custom("O,mg,1");
+              id(do_ezo).send_custom("O,%,1");
+            }
+            if (id(do_select_command).state == "Output Units - % Saturation") {
+              id(do_ezo).send_custom("O,mg,0");
+              id(do_ezo).send_custom("O,%,1");
+            }
+            if (id(do_select_command).state == "Output Units - mg/L") {
+              id(do_ezo).send_custom("O,mg,1");
+              id(do_ezo).send_custom("O,%,0");
+            }
+            if (id(do_select_command).state == "Check Calibration") {
+              id(do_ezo).get_calibration();
+            }  
+            if (id(do_select_command).state == "Calibrate @ Air") {
+              id(do_ezo).send_custom("Cal");
+            }
+            if (id(do_select_command).state == "Calibrate @ 0%") {
+              id(do_ezo).send_custom("Cal,0");
+            }
+            if (id(do_select_command).state == "CLEAR Calibration") {
+              id(do_ezo).clear_calibration();
+            }
+            if (id(do_select_command).state == "Salinity Compensation Value") {
+              id(do_ezo).send_custom("S,?");
+            }
+            if (id(do_select_command).state == "Set Salinity Compensation @ 35ppt") {
+              id(do_ezo).send_custom("S,35.0,ppt");
+            }
+            // else {
+            //   id(do_ezo).send_custom("R");
+            // }
+
+select:
+  - platform: template
+    name: DO Select Command
+    id: do_select_command
+    optimistic: true
+    # disabled_by_default: true
+    entity_category: "Config"
+    options:
+      - "Read"
+      - "Information"
+      - "Status"
+      - "Get Enabled Parameter(s)"
+      - "Output Units - All (Default)"
+      - "Output Units - % Saturation"
+      - "Output Units - mg/L"
+      - "Check Calibration"
+      - "Calibrate @ Air"
+      - "Calibrate @ 0%"
+      - "CLEAR Calibration"
+      - "Salinity Compensation Value"
+      - "Set Salinity Compensation @ 35ppt"
+    initial_option: "Check Calibration"
+    set_action:
+      - logger.log:
+          format: "Chosen option: %s"
+          args: ["x.c_str()"]

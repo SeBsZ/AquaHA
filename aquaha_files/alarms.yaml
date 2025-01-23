@@ -1,0 +1,259 @@
+output:
+  - platform: ledc
+    id: rtttl_out
+    pin: GPIO18
+    channel: 8
+
+switch:
+  - platform: template
+    name: "Enable Alarms"
+    id: enable_alarms
+    optimistic: True
+    restore_mode: RESTORE_DEFAULT_OFF
+  - platform: template
+    name: "Enable Soft Alarms"
+    id: enable_soft_alarms
+    optimistic: True
+    restore_mode: RESTORE_DEFAULT_OFF
+
+interval:
+  - interval: "10s"
+    then:
+      - if:
+          condition: 
+            - or:
+              - lambda: |-
+                  if ((id(temp1).state < id(temp_threshold_low).state) or (id(temp1).state > id(temp_threshold_high).state)) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+              - lambda: |-
+                  if ((id(sensor_salinity).state < id(salinity_threshold_low).state) or (id(sensor_salinity).state > id(salinity_threshold_high).state)) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+              - lambda: |-
+                  if ((id(ph_ezo).state < id(ph_threshold_low).state) or (id(ph_ezo).state > id(ph_threshold_high).state)) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+            - switch.is_on: enable_alarms
+          then:
+            - rtttl.play: 'siren:d=8,o=5,b=150:d,e,d,e,d,e,d,e'
+            - binary_sensor.template.publish:
+                id: active_alarm_state
+                state: ON
+          else:
+            - binary_sensor.template.publish:
+                id: active_alarm_state
+                state: OFF
+      - if:
+          condition: 
+            - or:
+              - lambda: |-
+                  if ((id(temp1).state < id(temp_soft_low).state) or (id(temp1).state > id(temp_soft_high).state)) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+              - lambda: |-
+                  if ((id(sensor_salinity).state < id(salinity_soft_low).state) or (id(sensor_salinity).state > id(salinity_soft_high).state)) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+              - lambda: |-
+                  if ((id(ph_ezo).state < id(ph_soft_low).state) or (id(ph_ezo).state > id(ph_soft_high).state)) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+            - switch.is_on: enable_soft_alarms
+          then:
+            - binary_sensor.template.publish:
+                id: active_soft_alarm_state
+                state: ON
+          else:
+            - binary_sensor.template.publish:
+                id: active_soft_alarm_state
+                state: OFF
+
+rtttl:
+  output: rtttl_out
+  id: my_rtttl
+binary_sensor:
+  # API Status
+  - platform: status
+    name: "Status"
+  - platform: template
+    name: "Active alarm state"
+    id: "active_alarm_state"
+  - platform: template
+    name: "Active soft alarm state"
+    id: "active_soft_alarm_state"
+
+number:
+  - platform: template
+    name: Salinity Threshold Low
+    id: salinity_threshold_low
+    min_value: 25
+    initial_value: 33
+    max_value: 40
+    restore_value: True
+    optimistic: True
+    step: 0.1
+    mode: box
+  - platform: template
+    name: Salinity Threshold High
+    id: salinity_threshold_high
+    restore_value: True
+    min_value: 25
+    initial_value: 35
+    max_value: 40
+    optimistic: True
+    step: 0.1
+    mode: box
+  - platform: template
+    name: pH Threshold Low
+    id: ph_threshold_low
+    restore_value: True
+    min_value: 6
+    initial_value: 8.1
+    max_value: 9
+    optimistic: True
+    step: 0.1
+    mode: box
+  - platform: template
+    name: pH Threshold High
+    id: ph_threshold_high
+    restore_value: True
+    min_value: 6
+    initial_value: 8.4
+    max_value: 9
+    optimistic: True
+    step: 0.1
+    mode: box
+  - platform: template
+    name: Temp Threshold Low
+    id: temp_threshold_low
+    restore_value: True
+    min_value: 20
+    initial_value: 24
+    max_value: 30
+    optimistic: True
+    step: 0.1
+    mode: box
+  - platform: template
+    name: Temp Threshold High
+    id: temp_threshold_high
+    restore_value: True
+    min_value: 20
+    initial_value: 25
+    max_value: 30
+    optimistic: True
+    step: 0.1
+    mode: box
+  - platform: template
+    name: Sump Threshold Low
+    id: sump_threshold_low
+    restore_value: True
+    min_value: 0
+    initial_value: 200
+    max_value: 400
+    optimistic: True
+    step: 1
+    mode: box
+  - platform: template
+    name: Sump Threshold High
+    id: sump_threshold_high
+    restore_value: True
+    min_value: 0
+    initial_value: 300
+    max_value: 400
+    optimistic: True
+    step: 1
+    mode: box
+
+  - platform: template
+    name: Salinity Soft Low
+    id: salinity_soft_low
+    min_value: 25
+    initial_value: 33
+    max_value: 40
+    restore_value: True
+    optimistic: True
+    step: 0.1
+    mode: box
+  - platform: template
+    name: Salinity Soft High
+    id: salinity_soft_high
+    restore_value: True
+    min_value: 25
+    initial_value: 35
+    max_value: 40
+    optimistic: True
+    step: 0.1
+    mode: box
+  - platform: template
+    name: pH Soft Low
+    id: ph_soft_low
+    restore_value: True
+    min_value: 6
+    initial_value: 8.1
+    max_value: 9
+    optimistic: True
+    step: 0.1
+    mode: box
+  - platform: template
+    name: pH Soft High
+    id: ph_soft_high
+    restore_value: True
+    min_value: 6
+    initial_value: 8.4
+    max_value: 9
+    optimistic: True
+    step: 0.1
+    mode: box
+  - platform: template
+    name: Temp Soft Low
+    id: temp_soft_low
+    restore_value: True
+    min_value: 20
+    initial_value: 24
+    max_value: 30
+    optimistic: True
+    step: 0.1
+    mode: box
+  - platform: template
+    name: Temp Soft High
+    id: temp_soft_high
+    restore_value: True
+    min_value: 20
+    initial_value: 25
+    max_value: 30
+    optimistic: True
+    step: 0.1
+    mode: box
+  - platform: template
+    name: Sump Soft Low
+    id: sump_soft_low
+    restore_value: True
+    min_value: 0
+    initial_value: 200
+    max_value: 600
+    optimistic: True
+    step: 1
+    mode: box
+  - platform: template
+    name: Sump Soft High
+    id: sump_soft_high
+    restore_value: True
+    min_value: 0
+    initial_value: 300
+    max_value: 600
+    optimistic: True
+    step: 1
+    mode: box

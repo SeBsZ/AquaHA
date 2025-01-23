@@ -1,0 +1,71 @@
+switch:
+  - platform: gpio
+    id: disable_iso
+    name: "Disable EZO module power"
+    pin: GPIO4
+  - platform: template
+    name: "Enable Temperature Compensation"
+    id: enable_temperature_compensation
+    optimistic: True
+    restore_mode: RESTORE_DEFAULT_OFF
+    turn_on_action:
+      - button.press: write_temp_comp
+    turn_off_action:
+      - button.press: reset_temp_comp
+
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+  scan: true
+  id: bus_a
+  
+sensor:
+  # Wifi Signal 
+  - platform: wifi_signal # Reports the WiFi signal strength/RSSI in dB
+    name: "WiFi Signal dB"
+    disabled_by_default: true
+    id: wifi_signal_db
+    update_interval: 60s
+    entity_category: "diagnostic"
+  # Wifi %
+  - platform: copy # Reports the WiFi signal strength in %
+    source_id: wifi_signal_db
+    name: "WiFi Signal Strength"
+    filters:
+      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+    unit_of_measurement: "%"
+    entity_category: "diagnostic"
+  # Uptime sensor
+  - platform: uptime
+    name: Uptime 
+  - platform: internal_temperature
+    name: "Internal Temperature"
+
+text_sensor:
+  # Hostname
+  - platform: template
+    name: "Hostname"
+    id: hostname
+    icon: mdi:cellphone-arrow-down
+    lambda: |-
+      return {"${name}"};
+    entity_category: "diagnostic"
+  # Wifi Info
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+      icon: mdi:ip-network
+    ssid:
+      name: Connected SSID
+      icon: mdi:wifi-arrow-left-right
+    bssid:
+      name: Connected BSSID
+      icon: mdi:wifi-star
+      disabled_by_default: true
+    mac_address:
+      name: Mac Address
+      icon: mdi:chip
+
+button:
+  - platform: restart
+    name: "Restart device"
