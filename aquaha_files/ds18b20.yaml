@@ -42,7 +42,7 @@ button:
               - switch.is_on: enable_temperature_compensation
             then:
               - lambda: |-
-                  if (id(ph_module) == 'true') {
+                  if (id(ph_module)) {
                     byte error;
                     Wire.beginTransmission(${ph_address});
                     error = Wire.endTransmission();
@@ -54,7 +54,7 @@ button:
                       ESP_LOGW("custom_ph_read", "No pH sensor detected at address: ${ph_address}!");
                     }
                   }
-                  if (id(ec_module) == 'true') {
+                  if (id(ec_module)) {
                     byte error;
                     Wire.beginTransmission(${ec_address});
                     error = Wire.endTransmission();
@@ -66,7 +66,7 @@ button:
                       ESP_LOGW("custom_conductivity_read", "No Conductivity sensor detected at address: ${ec_address}!");
                     }
                   }
-                  if (id(do_module) == 'true') {
+                  if (id(do_module)) {
                     byte error;
                     Wire.beginTransmission(${do_address});
                     error = Wire.endTransmission();
@@ -83,7 +83,7 @@ button:
     internal: true
     on_press:
       - lambda: |-
-          if (id(ph_module) == 'true') {
+          if (id(ph_module)) {
             byte error;
             Wire.beginTransmission(${ph_address});
             error = Wire.endTransmission();
@@ -95,7 +95,7 @@ button:
               ESP_LOGW("custom_ph_read", "No pH sensor detected at address: ${ph_address}!");
             }
           }
-          if (id(ec_module) == 'true') {
+          if (id(ec_module)) {
             byte error;
             Wire.beginTransmission(${ec_address});
             error = Wire.endTransmission();
@@ -107,7 +107,7 @@ button:
               ESP_LOGW("custom_conductivity_read", "No Conductivity sensor detected at address: ${ec_address}!");
             }
           }
-          if (id(do_module) == 'true') {
+          if (id(do_module)) {
             byte error;
             Wire.beginTransmission(${do_address});
             error = Wire.endTransmission();
