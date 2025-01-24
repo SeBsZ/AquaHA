@@ -2,7 +2,7 @@ substitutions:
   ph_address: "99"
   ph_interval: "60s"
   do_address: "97"
-  do_interval: "60s"
+  do_interval: "10s"
   ec_address: "100"
   ec_interval: "60s"
 
