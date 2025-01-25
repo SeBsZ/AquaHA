@@ -143,6 +143,9 @@ button:
             if (id(do_select_command).state == "Salinity Compensation Value") {
               id(do_ezo).send_custom("S,?");
             }
+            if (id(do_select_command).state == Clear Salinity Compensation") {
+              id(do_ezo).send_custom("S,0.0,ppt");
+            }
             if (id(do_select_command).state == "Set Salinity Compensation @ 35ppt") {
               id(do_ezo).send_custom("S,35.0,ppt");
             }
@@ -170,6 +173,7 @@ select:
       - "Calibrate @ 0%"
       - "CLEAR Calibration"
       - "Salinity Compensation Value"
+      - "Clear Salinity Compensation"
       - "Set Salinity Compensation @ 35ppt"
     initial_option: "Check Calibration"
     set_action:
