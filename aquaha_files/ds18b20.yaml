@@ -1,17 +1,20 @@
-one_wire:
-  - platform: gpio
-    pin: GPIO23
+external_components:
+  - source: github://nrandell/dallasng
+  
+dallasng:
+  - pin: GPIO23
     id: one_wire_1
-  - platform: gpio
-    pin: GPIO5
+    update_interval: 60s
+  - pin: GPIO5
     id: one_wire_2
+    update_interval: 60s
 
 sensor:
-  - platform: dallas_temp
+  - platform: dallasng
     name: temp1
     id: temp1
-    update_interval: "60s"
-    one_wire_id: one_wire_1
+    dallasng_id: one_wire_1
+    index: 0
     on_value:
       then:
       - if:
@@ -22,11 +25,11 @@ sensor:
             - switch.is_on: enable_temperature_compensation
           then:
             - button.press: write_temp_comp
-  - platform: dallas_temp
+  - platform: dallasng
     name: temp2
     id: temp2
-    update_interval: "60s"
-    one_wire_id: one_wire_2
+    dallasng_id: one_wire_2
+    index: 0
 
 button:
   - platform: template
