@@ -14,7 +14,6 @@ sensor:
     id: temp1
     index: 0
     resolution: 12
-    expire_after: 600s
     filters:
       - filter_out: NAN
     on_value:
