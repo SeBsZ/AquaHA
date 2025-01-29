@@ -1,21 +1,25 @@
 external_components:
-  - source: github://nrandell/dallasng
+  - source:
+      type: git
+      url: https://github.com/ssieb/esphome
+      ref: ds
+    components: [ dallas ]
+    refresh: 1min
   
-dallasng:
-  - pin: GPIO23
-    update_interval: 60s
-  #- pin: GPIO5
-  #  id: one_wire_2
-  #  update_interval: 60s
+one_wire:
+  - platform: gpio
+    pin: GPIO23
+    id: one_wire_1
+  - platform: gpio
+    pin: GPIO5
+    id: one_wire_2
 
 sensor:
-  - platform: dallasng
+  - platform: dallas_temp
     name: temp1
     id: temp1
-    index: 0
-    resolution: 12
-    filters:
-      - filter_out: NAN
+    update_interval: "60s"
+    one_wire_id: one_wire_1
     on_value:
       then:
       - if:
@@ -26,6 +30,11 @@ sensor:
             - switch.is_on: enable_temperature_compensation
           then:
             - button.press: write_temp_comp
+  - platform: dallas_temp
+    name: temp2
+    id: temp2
+    update_interval: "60s"
+    one_wire_id: one_wire_2
 
 button:
   - platform: template
