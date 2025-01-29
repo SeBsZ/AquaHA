@@ -3,18 +3,20 @@ external_components:
   
 dallasng:
   - pin: GPIO23
-    id: one_wire_1
     update_interval: 60s
-  - pin: GPIO5
-    id: one_wire_2
-    update_interval: 60s
+  #- pin: GPIO5
+  #  id: one_wire_2
+  #  update_interval: 60s
 
 sensor:
   - platform: dallasng
     name: temp1
     id: temp1
-    dallasng_id: one_wire_1
     index: 0
+    resolution: 12
+    expire_after: 600s
+    filters:
+      - filter_out: NAN
     on_value:
       then:
       - if:
@@ -25,11 +27,6 @@ sensor:
             - switch.is_on: enable_temperature_compensation
           then:
             - button.press: write_temp_comp
-  - platform: dallasng
-    name: temp2
-    id: temp2
-    dallasng_id: one_wire_2
-    index: 0
 
 button:
   - platform: template
