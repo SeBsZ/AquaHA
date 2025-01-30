@@ -84,6 +84,18 @@ button:
             if (id(ph_select_command).state == "CLEAR Calibration") {
               id(ph_ezo).clear_calibration();
             }
+            if (id(ph_select_command).state == "Calibrate pH 4") {
+              id(ph_ezo).set_calibration_point_low(4.00);
+            }
+            if (id(ph_select_command).state == "Calibrate pH 7") {
+              id(ph_ezo).set_calibration_point_mid(7.00);
+            }
+            if (id(ph_select_command).state == "Calibrate pH 9") {
+              id(ph_ezo).set_calibration_point_high(10.00);
+            }
+            if (id(ph_select_command).state == "Calibrate pH 10") {
+              id(ph_ezo).set_calibration_point_high(10.00);
+            }
 
 select:
   - platform: template
@@ -98,6 +110,10 @@ select:
       - "Status"
       - "Get Slope"
       - "Check Calibration"
+      - "Calibrate pH 4"
+      - "Calibrate pH 7"
+      - "Calibrate pH 9"
+      - "Calibrate pH 10"
       - "CLEAR Calibration"
     initial_option: "Check Calibration"
     set_action:
