@@ -91,7 +91,7 @@ button:
               id(ph_ezo).set_calibration_point_mid(7.00);
             }
             if (id(ph_select_command).state == "Calibrate pH 9") {
-              id(ph_ezo).set_calibration_point_high(10.00);
+              id(ph_ezo).set_calibration_point_high(9.00);
             }
             if (id(ph_select_command).state == "Calibrate pH 10") {
               id(ph_ezo).set_calibration_point_high(10.00);
