@@ -6,7 +6,7 @@ sensor:
     address: ${ph_address}
     unit_of_measurement: ""
     accuracy_decimals: 2
-    update_interval: ${ph_interval}
+    update_interval: 1s
     state_class: "measurement"
     device_class: PH
     on_custom: 
@@ -39,9 +39,9 @@ sensor:
     accuracy_decimals: 2
     filters:
       - sliding_window_moving_average: 
-          window_size: 5
-          send_every: 1
-          send_first_at: 1
+          window_size: 60
+          send_every: 60
+          send_first_at: 30
 
 text_sensor:
   - platform: template
