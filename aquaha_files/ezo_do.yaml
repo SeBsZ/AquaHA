@@ -1,4 +1,10 @@
 interval:
+  - interval: "1s"
+    then:
+      - lambda: |-
+          if (id(do_module)) {
+            id(do_read).press();
+          }
   - interval: "${do_interval}"
     then:
       - lambda: |-
@@ -15,7 +21,7 @@ sensor:
     address: ${do_address}
     unit_of_measurement: "mg/L"
     accuracy_decimals: 2
-    update_interval: 1s
+    update_interval: never
     state_class: "measurement"
     # disabled_by_default: true
     on_custom: 
