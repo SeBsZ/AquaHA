@@ -20,6 +20,15 @@ switch:
       - button.press: write_temp_comp
     turn_off_action:
       - button.press: reset_temp_comp
+  - platform: template
+    name: "Enable DO Salinity Compensation"
+    id: enable_salinity_compensation
+    optimistic: True
+    restore_mode: RESTORE_DEFAULT_OFF
+    turn_on_action:
+      - button.press: write_salinity_comp
+    turn_off_action:
+      - button.press: reset_salinity_comp
 
 i2c:
   sda: GPIO21
