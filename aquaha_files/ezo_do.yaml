@@ -92,24 +92,19 @@ button:
     id: write_salinity_comp
     internal: true
     on_press:
-      then:
-        - if:
-            condition: 
-              - switch.is_on: enable_salinity_compensation
-            then:
-              - lambda: |-
-                  if (id(do_module)) {
-                    byte error;
-                    Wire.beginTransmission(${do_address});
-                    error = Wire.endTransmission();
-                    if (error == 0) {
-                      id(do_ezo).send_custom("S,35.0,ppt");
-                      ESP_LOGW("custom_do_read", "Set 35ppt DO salinity compensation.");
-                    }
-                    else {
-                      ESP_LOGW("custom_do_read", "No DO sensor detected at address: ${do_address}!");
-                    }
-                  }
+      - lambda: |-
+          if (id(do_module)) {
+            byte error;
+            Wire.beginTransmission(${do_address});
+            error = Wire.endTransmission();
+            if (error == 0) {
+              id(do_ezo).send_custom("S,35.0,ppt");
+              ESP_LOGW("custom_do_read", "Set 35ppt DO salinity compensation.");
+            }
+            else {
+              ESP_LOGW("custom_do_read", "No DO sensor detected at address: ${do_address}!");
+            }
+          }
   - platform: template
     id: reset_salinity_comp
     internal: true
