@@ -2,19 +2,19 @@ switch:
   - platform: gpio
     pin: GPIO13
     id: heater1
-    name: relay1
+    name: name: "Relay 1"
   - platform: gpio
     pin: GPIO14
     id: heater2
-    name: relay2
+    name: name: "Relay 2"
   - platform: gpio
     pin: GPIO25
     id: relay3
-    name: relay3
+    name: name: "Relay 3"
   - platform: gpio
     pin: GPIO16
     id: relay4
-    name: relay4
+    name: name: "Relay 4"
 
 binary_sensor:
   - platform: template
