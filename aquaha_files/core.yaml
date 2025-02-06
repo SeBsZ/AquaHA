@@ -6,6 +6,11 @@ substitutions:
   ec_address: "100"
   ec_interval: "60s"
 
+light:
+  - platform: status_led
+    name: "Status LED"
+    pin: GPIO17
+
 switch:
   - platform: gpio
     id: disable_iso
