@@ -2,35 +2,19 @@ switch:
   - platform: gpio
     pin: GPIO13
     id: heater1
-    internal: True
-    on_turn_on:
-      - binary_sensor.template.publish:
-          id: heater1_state
-          state: ON
-    on_turn_off:
-      - binary_sensor.template.publish:
-          id: heater1_state
-          state: OFF
+    name: relay1
   - platform: gpio
     pin: GPIO14
     id: heater2
-    internal: True
-    on_turn_on:
-      - binary_sensor.template.publish:
-          id: heater2_state
-          state: ON
-    on_turn_off:
-      - binary_sensor.template.publish:
-          id: heater2_state
-          state: OFF
+    name: relay2
   - platform: gpio
     pin: GPIO25
     id: relay3
-    internal: True
+    name: relay3
   - platform: gpio
     pin: GPIO16
     id: relay4
-    internal: True
+    name: relay4
 
 binary_sensor:
   - platform: template
