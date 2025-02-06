@@ -11,7 +11,7 @@ esphome:
       - priority: 600
         then:
           - delay: 5s
-          - rtttl.play: 'Under the Sea:d=4,o=6,b=200:8d,8f,8a#,d7,d7,8a#,c7,d#7,d7,a#,8a#5,8d,8f,a#,a#,8c,a,c7,a#,p,8d,8f,8a#,d7,d7,8a#,c7,d#7,d7,a#,8a#5,8d,8f,a#,a#,8c,a,c7,16a#,16d,16a#,16d,16a#,16d,16a#'
+          - rtttl.play: 'Under the Sea:d=4,o=6,b=200:8d,8f,8a#,d7,d7,8a#,c7,d#7,d7,a#,8a#5,8d,8f,a#,a#,8c,a,c7,a#'
 light:
   - platform: status_led
     name: "Status LED"
