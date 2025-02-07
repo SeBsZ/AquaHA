@@ -20,6 +20,7 @@ sensor:
     id: temp1
     update_interval: 60s
     one_wire_id: one_wire_1
+    address: 0xE50623C307C11128
     on_value:
       then:
       - if:
@@ -35,6 +36,7 @@ sensor:
     id: temp2
     update_interval: 60s
     one_wire_id: one_wire_2
+    address: 0xFFFF0C3380A51728
 
 button:
   - platform: template
