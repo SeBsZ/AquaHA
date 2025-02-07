@@ -6,7 +6,7 @@ binary_sensor:
         input: true
       inverted: true
     device_class: moisture
-    name: "water_sensor_1"
+    name: "Water Sensor 1"
     id: "water_sensor_1"
   - platform: gpio
     pin:
@@ -15,7 +15,7 @@ binary_sensor:
         input: true
       inverted: true
     device_class: moisture
-    name: "water_sensor_2"
+    name: "Water Sensor 2"
     id: "water_sensor_2"
   - platform: gpio
     pin:
@@ -24,7 +24,7 @@ binary_sensor:
         input: true
       inverted: true
     device_class: moisture
-    name: "water_sensor_3"
+    name: "Water Sensor 3"
     id: "water_sensor_3"
   - platform: gpio
     pin:
@@ -33,5 +33,5 @@ binary_sensor:
         input: true
       inverted: true
     device_class: moisture
-    name: "water_sensor_4"
+    name: "Water Sensor 4"
     id: "water_sensor_4"
