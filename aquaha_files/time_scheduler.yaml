@@ -3,9 +3,17 @@ time:
     id: sntp_time
     timezone: Europe/Brussels
     servers:
-    - 0.pool.ntp.org
-    - 1.pool.ntp.org
-    - 2.pool.ntp.org
+      - 0.pool.ntp.org
+      - 1.pool.ntp.org
+      - 2.pool.ntp.org
+    on_time_sync:
+      then:
+        - script.execute: schedule_current_lights
+        
+interval:
+- interval: 60s
+  then:
+    - script.execute: schedule_current_lights
 
 switch:
   - platform: template
@@ -457,8 +465,8 @@ text_sensor:
     lambda: return  id(sntp_time).now().strftime("%H:%M:%S");
     disabled_by_default: true
 
-interval:
-- interval: 60s
+script:
+- id: schedule_current_lights
   then:
     - lambda: |-
         auto time_now = id(sntp_time).now();
