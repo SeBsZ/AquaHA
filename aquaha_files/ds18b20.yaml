@@ -8,7 +8,7 @@ one_wire:
 
 sensor:
   - platform: dallas_temp
-    name: temp1
+    name: "Temp 1"
     id: temp1
     update_interval: 60s
     one_wire_id: one_wire_1
@@ -24,7 +24,7 @@ sensor:
           then:
             - button.press: write_temp_comp
   - platform: dallas_temp
-    name: temp2
+    name: "Temp 2"
     id: temp2
     update_interval: 60s
     one_wire_id: one_wire_2
