@@ -27,7 +27,6 @@ interval:
 output:
   - platform: gpio
     id: status_led_1
-    name: "Status LED"
     pin: 
       number: GPIO17
       mode: output
