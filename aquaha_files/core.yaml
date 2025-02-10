@@ -18,9 +18,11 @@ web_server:
   version: "3"
   
 interval:
-  - interval: 1000ms
+  - interval: 2000ms
     then:
-      - output.toggle: status_led_1
+      - output.turn_on: status_led_1
+      - delay: 1000ms
+      - output.turn_off: status_led_1
   
 output:
   - platform: gpio
