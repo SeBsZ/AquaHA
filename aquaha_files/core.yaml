@@ -12,6 +12,12 @@ esphome:
         then:
           - delay: 5s
           - rtttl.play: 'Under the Sea:d=4,o=6,b=200:8d,8f,8a#,d7,d7,8a#,c7,d#7,d7,a#'
+
+web_server:
+  port: 80
+  version: "3"
+  
+  
 light:
   - platform: status_led
     name: "Status LED"
