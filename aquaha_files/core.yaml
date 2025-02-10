@@ -25,10 +25,12 @@ interval:
       - output.turn_off: status_led_1
   
 output:
-  - platform: status_led
+  - platform: gpio
     id: status_led_1
     name: "Status LED"
-    pin: GPIO17
+    pin: 
+      number: GPIO17
+      mode: output
 
 switch:
   - platform: gpio
