@@ -20,12 +20,13 @@ web_server:
 interval:
   - interval: 500ms
     then:
-      - output.turn_on: status_led
+      - light.turn_on: status_led_1
       - delay: 250ms
-      - output.turn_off: status_led
+      - light.turn_off: status_led_1
   
 light:
   - platform: status_led
+    id: status_led_1
     name: "Status LED"
     pin: GPIO17
 
