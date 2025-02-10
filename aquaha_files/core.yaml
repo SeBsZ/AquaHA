@@ -18,13 +18,13 @@ web_server:
   version: "3"
   
 interval:
-  - interval: 500ms
+  - interval: 1000ms
     then:
-      - light.turn_on: status_led_1
-      - delay: 250ms
-      - light.turn_off: status_led_1
+      - output.turn_on: status_led_1
+      - delay: 1000ms
+      - output.turn_off: status_led_1
   
-light:
+output:
   - platform: status_led
     id: status_led_1
     name: "Status LED"
