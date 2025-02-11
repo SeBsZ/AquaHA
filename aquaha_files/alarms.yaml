@@ -23,7 +23,7 @@ interval:
           condition: 
             - or:
               - lambda: |-
-                  if ((id(temp1).state < id(temp_threshold_low).state) or (id(temp1).state > id(temp_threshold_high).state)) {
+                  if ((id(external_temperature_1).state < id(temp_threshold_low).state) or (id(external_temperature_1).state > id(temp_threshold_high).state)) {
                     return true;
                   } else {
                     return false;
@@ -54,7 +54,7 @@ interval:
           condition: 
             - or:
               - lambda: |-
-                  if ((id(temp1).state < id(temp_soft_low).state) or (id(temp1).state > id(temp_soft_high).state)) {
+                  if ((id(external_temperature_1).state < id(temp_soft_low).state) or (id(external_temperature_1).state > id(temp_soft_high).state)) {
                     return true;
                   } else {
                     return false;
