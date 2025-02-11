@@ -12,7 +12,7 @@ sensor:
     id: external_temperature_1
     update_interval: 60s
     one_wire_id: one_wire_1
-    address: ${internal_temp_address}
+    address: ${external_temp_address}
     on_value:
       then:
       - if:
@@ -24,11 +24,11 @@ sensor:
           then:
             - button.press: write_temp_comp
   - platform: dallas_temp
-    name: "AquaHA temperature"
+    name: "Temperature AquaHA"
     id: aquaha_temperature
     update_interval: 60s
     one_wire_id: one_wire_2
-    address: ${external_temp_address}
+    address: ${internal_temp_address}
 
 button:
   - platform: template
