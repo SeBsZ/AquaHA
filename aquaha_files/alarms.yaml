@@ -6,12 +6,12 @@ output:
 
 switch:
   - platform: template
-    name: "Enable Alarms"
+    name: "Alarms enable"
     id: enable_alarms
     optimistic: True
     restore_mode: RESTORE_DEFAULT_OFF
   - platform: template
-    name: "Enable Soft Alarms"
+    name: "Alarms soft enable"
     id: enable_soft_alarms
     optimistic: True
     restore_mode: RESTORE_DEFAULT_OFF
@@ -89,10 +89,10 @@ binary_sensor:
   - platform: status
     name: "Status"
   - platform: template
-    name: "Active alarm state"
+    name: "Alarm active"
     id: "active_alarm_state"
   - platform: template
-    name: "Active soft alarm state"
+    name: "Alarm soft active"
     id: "active_soft_alarm_state"
 
 number:
