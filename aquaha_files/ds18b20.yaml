@@ -8,27 +8,27 @@ one_wire:
 
 sensor:
   - platform: dallas_temp
-    name: "Temp 1"
-    id: temp1
+    name: "Temperature 1"
+    id: external_temperature_1
     update_interval: 60s
     one_wire_id: one_wire_1
-    address: 0xE50623C307C11128
+    address: ${internal_temp_address}
     on_value:
       then:
       - if:
           condition: 
             - sensor.in_range:
-                id: temp1
+                id: external_temperature_1
                 above: 0.5
             - switch.is_on: enable_temperature_compensation
           then:
             - button.press: write_temp_comp
   - platform: dallas_temp
-    name: "Temp 2"
-    id: temp2
+    name: "AquaHA temperature"
+    id: aquaha_temperature
     update_interval: 60s
     one_wire_id: one_wire_2
-    address: 0xFFFF0C3380A51728
+    address: ${external_temp_address}
 
 button:
   - platform: template
@@ -39,7 +39,7 @@ button:
         - if:
             condition: 
               - sensor.in_range:
-                  id: temp1
+                  id: external_temperature_1
                   above: 0.5
               - switch.is_on: enable_temperature_compensation
             then:
@@ -49,7 +49,7 @@ button:
                     Wire.beginTransmission(${ph_address});
                     error = Wire.endTransmission();
                     if (error == 0) {
-                      id(ph_ezo).set_t(id(temp1).state);
+                      id(ph_ezo).set_t(id(external_temperature_1).state);
                       ESP_LOGW("custom_ph_read", "Set pH temperature compensation.");
                     }
                     else {
@@ -61,7 +61,7 @@ button:
                     Wire.beginTransmission(${ec_address});
                     error = Wire.endTransmission();
                     if (error == 0) {
-                      id(ec_ezo).set_t(id(temp1).state);
+                      id(ec_ezo).set_t(id(external_temperature_1).state);
                       ESP_LOGW("custom_conductivity_read", "Set EC temperature compensation.");
                     }
                     else {
@@ -73,7 +73,7 @@ button:
                     Wire.beginTransmission(${do_address});
                     error = Wire.endTransmission();
                     if (error == 0) {
-                      id(do_ezo).set_t(id(temp1).state);
+                      id(do_ezo).set_t(id(external_temperature_1).state);
                       ESP_LOGW("custom_do_read", "Set DO temperature compensation.");
                     }
                     else {
