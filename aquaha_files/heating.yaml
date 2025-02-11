@@ -1,11 +1,11 @@
 switch:
   - platform: gpio
     pin: GPIO13
-    id: heater1
+    id: relay1
     name: "Relay 1"
   - platform: gpio
     pin: GPIO14
-    id: heater2
+    id: relay2
     name: "Relay 2"
   - platform: gpio
     pin: GPIO25
@@ -16,32 +16,24 @@ switch:
     id: relay4
     name: "Relay 4"
 
-binary_sensor:
-  - platform: template
-    name: "Heater 1"
-    id: "heater1_state"
-  - platform: template
-    name: "Heater 2"
-    id: "heater2_state"
-
 climate:
   - platform: thermostat
     name: "Thermostat"
-    sensor: temp1
+    sensor: external_temperature_1
     heat_deadband: 0.1
     heat_overrun: 0.1
     min_heating_off_time: 60s
     min_heating_run_time: 60s
     min_idle_time: 60s
     heat_action:
-      - switch.turn_on: heater1
+      - switch.turn_on: relay1
     supplemental_heating_action:
-      - switch.turn_on: heater2
+      - switch.turn_on: relay2
     max_heating_run_time: 24h
     supplemental_heating_delta: 1.0
     idle_action:
-      - switch.turn_off: heater1
-      - switch.turn_off: heater2
+      - switch.turn_off: relay1
+      - switch.turn_off: relay2
     default_preset: Default
     preset:
       - name: Default
