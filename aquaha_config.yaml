@@ -1,7 +1,9 @@
 substitutions:
   name: "aquaha"
   friendly_name: "AquaHA"
-  app_version: "1.0.5"
+  app_version: "1.0.3"
+  internal_temp_address: "0x00"
+  external_temp_address: "0x00"
 
 packages:
   core: !include aquaha_files/core.yaml
