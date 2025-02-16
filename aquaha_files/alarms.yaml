@@ -6,80 +6,56 @@ output:
 
 switch:
   - platform: template
-    name: "Alarms enable"
+    name: "Enable alarms"
     id: enable_alarms
     optimistic: True
     restore_mode: RESTORE_DEFAULT_OFF
   - platform: template
-    name: "Alarms soft enable"
+    name: "Enable soft alarms"
     id: enable_soft_alarms
     optimistic: True
     restore_mode: RESTORE_DEFAULT_OFF
 
 interval:
-  - interval: "10s"
+  - interval: "60s"
     then:
+      - lambda: |-
+          bool temp_alarm = (id(external_temperature_1).state < id(temp_threshold_low).state) || 
+                            (id(external_temperature_1).state > id(temp_threshold_high).state);
+          
+          bool salinity_alarm = (id(sensor_salinity).state < id(salinity_threshold_low).state) || 
+                                (id(sensor_salinity).state > id(salinity_threshold_high).state);
+
+          bool ph_alarm = (id(ph_ezo).state < id(ph_threshold_low).state) || 
+                          (id(ph_ezo).state > id(ph_threshold_high).state);
+
+          bool temp_soft_alarm = (id(external_temperature_1).state < id(temp_soft_low).state) || 
+                                 (id(external_temperature_1).state > id(temp_soft_high).state);
+
+          bool salinity_soft_alarm = (id(sensor_salinity).state < id(salinity_soft_low).state) || 
+                                     (id(sensor_salinity).state > id(salinity_soft_high).state);
+
+          bool ph_soft_alarm = (id(ph_ezo).state < id(ph_soft_low).state) || 
+                               (id(ph_ezo).state > id(ph_soft_high).state);
+
+          bool alarm_triggered = (temp_alarm || salinity_alarm || ph_alarm);
+          bool soft_alarm_triggered = (temp_soft_alarm || salinity_soft_alarm || ph_soft_alarm);
+
+          id(salinity_alarm).publish_state(salinity_alarm);
+          id(salinity_soft_alarm).publish_state(salinity_soft_alarm);
+          id(temp_alarm).publish_state(temp_alarm);
+          id(temp_soft_alarm).publish_state(temp_soft_alarm);
+          id(ph_alarm).publish_state(ph_alarm);
+          id(ph_soft_alarm).publish_state(ph_soft_alarm);
+
+          id(active_alarm).publish_state(alarm_triggered);
+          id(active_soft_alarm).publish_state(soft_alarm_triggered);
       - if:
           condition: 
-            - or:
-              - lambda: |-
-                  if ((id(external_temperature_1).state < id(temp_threshold_low).state) or (id(external_temperature_1).state > id(temp_threshold_high).state)) {
-                    return true;
-                  } else {
-                    return false;
-                  }
-              - lambda: |-
-                  if ((id(sensor_salinity).state < id(salinity_threshold_low).state) or (id(sensor_salinity).state > id(salinity_threshold_high).state)) {
-                    return true;
-                  } else {
-                    return false;
-                  }
-              - lambda: |-
-                  if ((id(ph_ezo).state < id(ph_threshold_low).state) or (id(ph_ezo).state > id(ph_threshold_high).state)) {
-                    return true;
-                  } else {
-                    return false;
-                  }
+            - sensor.is_on: active_alarm
             - switch.is_on: enable_alarms
           then:
             - rtttl.play: 'siren:d=8,o=5,b=150:d,e,d,e,d,e,d,e'
-            - binary_sensor.template.publish:
-                id: active_alarm_state
-                state: ON
-          else:
-            - binary_sensor.template.publish:
-                id: active_alarm_state
-                state: OFF
-      - if:
-          condition: 
-            - or:
-              - lambda: |-
-                  if ((id(external_temperature_1).state < id(temp_soft_low).state) or (id(external_temperature_1).state > id(temp_soft_high).state)) {
-                    return true;
-                  } else {
-                    return false;
-                  }
-              - lambda: |-
-                  if ((id(sensor_salinity).state < id(salinity_soft_low).state) or (id(sensor_salinity).state > id(salinity_soft_high).state)) {
-                    return true;
-                  } else {
-                    return false;
-                  }
-              - lambda: |-
-                  if ((id(ph_ezo).state < id(ph_soft_low).state) or (id(ph_ezo).state > id(ph_soft_high).state)) {
-                    return true;
-                  } else {
-                    return false;
-                  }
-            - switch.is_on: enable_soft_alarms
-          then:
-            - binary_sensor.template.publish:
-                id: active_soft_alarm_state
-                state: ON
-          else:
-            - binary_sensor.template.publish:
-                id: active_soft_alarm_state
-                state: OFF
 
 rtttl:
   output: rtttl_out
@@ -89,11 +65,35 @@ binary_sensor:
   - platform: status
     name: "Status"
   - platform: template
-    name: "Alarm active"
-    id: "active_alarm_state"
+    name: "Active alarm"
+    id: "active_alarm"
   - platform: template
-    name: "Alarm soft active"
-    id: "active_soft_alarm_state"
+    name: "Salinity alarm"
+    id: "salinity_alarm"
+  - platform: template
+    name: "Salinity soft alarm"
+    id: "salinity_soft_alarm"
+  - platform: template
+    name: "Temperature alarm"
+    id: "temperature_alarm"
+  - platform: template
+    name: "Temperature soft alarm"
+    id: "temperature_soft_alarm"
+   - platform: template
+    name: "pH alarm"
+    id: "ph_alarm"
+  - platform: template
+    name: "pH soft alarm"
+    id: "ph_soft_alarm"
+   - platform: template
+    name: "Oxygen alarm"
+    id: "oxygen_alarm"
+  - platform: template
+    name: "Oxygen soft alarm"
+    id: "oxygen_soft_alarm"
+  - platform: template
+    name: "Active soft alarm"
+    id: "active_soft_alarm"
 
 number:
   - platform: template
