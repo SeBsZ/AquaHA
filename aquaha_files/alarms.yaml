@@ -43,8 +43,8 @@ interval:
 
           id(salinity_alarm).publish_state(salinity_alarm);
           id(salinity_soft_alarm).publish_state(salinity_soft_alarm);
-          id(temp_alarm).publish_state(temp_alarm);
-          id(temp_soft_alarm).publish_state(temp_soft_alarm);
+          id(temperature_alarm).publish_state(temp_alarm);
+          id(temperature_soft_alarm).publish_state(temp_soft_alarm);
           id(ph_alarm).publish_state(ph_alarm);
           id(ph_soft_alarm).publish_state(ph_soft_alarm);
 
