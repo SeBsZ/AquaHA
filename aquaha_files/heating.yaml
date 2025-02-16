@@ -38,5 +38,3 @@ climate:
     preset:
       - name: Default
         default_target_temperature_low: 24.5 °C
-
-    
