@@ -52,7 +52,7 @@ interval:
           id(active_soft_alarm).publish_state(soft_alarm_triggered);
       - if:
           condition: 
-            - sensor.is_on: active_alarm
+            - binary_sensor.is_on: active_alarm
             - switch.is_on: enable_alarms
           then:
             - rtttl.play: 'siren:d=8,o=5,b=150:d,e,d,e,d,e,d,e'
@@ -79,13 +79,13 @@ binary_sensor:
   - platform: template
     name: "Temperature soft alarm"
     id: "temperature_soft_alarm"
-   - platform: template
+  - platform: template
     name: "pH alarm"
     id: "ph_alarm"
   - platform: template
     name: "pH soft alarm"
     id: "ph_soft_alarm"
-   - platform: template
+  - platform: template
     name: "Oxygen alarm"
     id: "oxygen_alarm"
   - platform: template
