@@ -20,33 +20,33 @@ interval:
   - interval: "60s"
     then:
       - lambda: |-
-          bool temp_alarm = (id(external_temperature_1).state < id(temp_threshold_low).state) || 
+          bool temp_alarm_bool = (id(external_temperature_1).state < id(temp_threshold_low).state) || 
                             (id(external_temperature_1).state > id(temp_threshold_high).state);
           
-          bool salinity_alarm = (id(sensor_salinity).state < id(salinity_threshold_low).state) || 
+          bool salinity_alarm_bool = (id(sensor_salinity).state < id(salinity_threshold_low).state) || 
                                 (id(sensor_salinity).state > id(salinity_threshold_high).state);
 
-          bool ph_alarm = (id(ph_ezo).state < id(ph_threshold_low).state) || 
+          bool ph_alarm_bool = (id(ph_ezo).state < id(ph_threshold_low).state) || 
                           (id(ph_ezo).state > id(ph_threshold_high).state);
 
-          bool temp_soft_alarm = (id(external_temperature_1).state < id(temp_soft_low).state) || 
+          bool temp_soft_alarm_bool = (id(external_temperature_1).state < id(temp_soft_low).state) || 
                                  (id(external_temperature_1).state > id(temp_soft_high).state);
 
-          bool salinity_soft_alarm = (id(sensor_salinity).state < id(salinity_soft_low).state) || 
+          bool salinity_soft_alarm_bool = (id(sensor_salinity).state < id(salinity_soft_low).state) || 
                                      (id(sensor_salinity).state > id(salinity_soft_high).state);
 
-          bool ph_soft_alarm = (id(ph_ezo).state < id(ph_soft_low).state) || 
+          bool ph_soft_alarm_bool = (id(ph_ezo).state < id(ph_soft_low).state) || 
                                (id(ph_ezo).state > id(ph_soft_high).state);
 
-          bool alarm_triggered = (temp_alarm || salinity_alarm || ph_alarm);
-          bool soft_alarm_triggered = (temp_soft_alarm || salinity_soft_alarm || ph_soft_alarm);
+          bool alarm_triggered = (temp_alarm_bool || salinity_alarm_bool || ph_alarm_bool);
+          bool soft_alarm_triggered = (temp_soft_alarm_bool || salinity_soft_alarm_bool || ph_soft_alarm_bool);
 
-          id(salinity_alarm).publish_state(salinity_alarm);
-          id(salinity_soft_alarm).publish_state(salinity_soft_alarm);
-          id(temperature_alarm).publish_state(temp_alarm);
-          id(temperature_soft_alarm).publish_state(temp_soft_alarm);
-          id(ph_alarm).publish_state(ph_alarm);
-          id(ph_soft_alarm).publish_state(ph_soft_alarm);
+          id(salinity_alarm).publish_state(salinity_alarm_bool);
+          id(salinity_soft_alarm).publish_state(salinity_soft_alarm_bool);
+          id(temperature_alarm).publish_state(temp_alarm_bool);
+          id(temperature_soft_alarm).publish_state(temp_soft_alarm_bool);
+          id(ph_alarm).publish_state(ph_alarm_bool);
+          id(ph_soft_alarm).publish_state(ph_soft_alarm_bool);
 
           id(active_alarm).publish_state(alarm_triggered);
           id(active_soft_alarm).publish_state(soft_alarm_triggered);
