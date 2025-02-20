@@ -96,7 +96,7 @@ button:
     internal: true
     on_press:
       - lambda: |-
-          if (id(do_module)) {
+          if (!id(hide_do_module)) {
             byte error;
             Wire.beginTransmission(${do_address});
             error = Wire.endTransmission();
@@ -113,7 +113,7 @@ button:
     internal: true
     on_press:
       - lambda: |-
-          if (id(do_module)) {
+          if (!id(hide_do_module)) {
             byte error;
             Wire.beginTransmission(${do_address});
             error = Wire.endTransmission();
