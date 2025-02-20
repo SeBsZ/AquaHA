@@ -66,6 +66,7 @@ switch:
   - platform: template
     name: "Enable DO Salinity Compensation"
     id: enable_salinity_compensation
+    internal: "${hide_do_module}"
     optimistic: True
     restore_mode: RESTORE_DEFAULT_OFF
     turn_on_action:
