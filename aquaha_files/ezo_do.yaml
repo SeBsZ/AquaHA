@@ -18,7 +18,7 @@ sensor:
     accuracy_decimals: 2
     update_interval: never
     state_class: "measurement"
-    # disabled_by_default: true
+    internal: "${do_module}"
     on_custom: 
       then:
         - lambda: 
@@ -40,6 +40,7 @@ sensor:
     icon: mdi:gas-cylinder
     accuracy_decimals: 1
     update_interval: never
+    internal: "${do_module}"
     state_class: "measurement"
     lambda: |-
       std::string str = id(do_raw_value).state;
@@ -64,6 +65,7 @@ sensor:
     name: "Dissolved Oxygen Average"
     state_class: "measurement"
     unit_of_measurement: "mg/L"
+    internal: "${do_module}"
     accuracy_decimals: 2
     filters:
       - sliding_window_moving_average: 
@@ -76,13 +78,14 @@ text_sensor:
     name: DO - Raw
     id: do_raw_value
     icon: mdi:counter
-    disabled_by_default: true
+    internal: "${do_module}"
     on_value: 
       then:
         - component.update: do_ezo
         - component.update: sensor_do_percent
   - platform: template
     name: DO - Result
+    internal: "${do_module}"
     icon: mdi:data-matrix
     id: do_result
     # disabled_by_default: true
@@ -126,6 +129,7 @@ button:
     name: DO - Take reading
     id: do_read
     icon: mdi:read
+    internal: "${do_module}"
     entity_category: "Config"
     on_press:
       then:
@@ -134,6 +138,7 @@ button:
   - platform: template
     name: DO - Send command
     id: do_send_command
+    internal: "${do_module}"
     entity_category: "Config"
     on_press:
       then:
@@ -192,6 +197,7 @@ select:
     name: DO Select Command
     id: do_select_command
     optimistic: true
+    internal: "${do_module}"
     # disabled_by_default: true
     entity_category: "Config"
     options:
