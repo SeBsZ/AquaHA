@@ -2,7 +2,7 @@ interval:
   - interval: "${do_interval}"
     then:
       - lambda: |-
-          if (id(do_module)) {
+          if (!id(hide_do_module)) {
             id(do_read).press();
             id(sensor_do_percent).update();
           }
