@@ -24,8 +24,8 @@ sensor:
           then:
             - button.press: write_temp_comp
   - platform: dallas_temp
-    name: "Temperature AquaHA"
-    id: aquaha_temperature
+    name: "Temperature internal"
+    id: internal_temperature
     update_interval: 60s
     one_wire_id: one_wire_2
     address: ${internal_temp_address}
