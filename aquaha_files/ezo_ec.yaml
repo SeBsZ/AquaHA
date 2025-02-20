@@ -11,7 +11,6 @@ sensor:
     icon: mdi:shaker-outline
     name: "EC-EZO"
     id: ec_ezo
-    internal: "${hide_ec_module}"
     address: ${ec_address}
     unit_of_measurement: "mS/cm"
     accuracy_decimals: 2
