@@ -5,6 +5,10 @@ substitutions:
   do_interval: "60s"
   ec_address: "100"
   ec_interval: "60s"
+  hide_do_module: !expr "not ${do_module}"
+  hide_ph_module: !expr "not ${ph_module}"
+  hide_ec_module: !expr "not ${ec_module}"
+  hide_orp_module: !expr "not ${orp_module}"
 
 esphome:
   on_boot:
