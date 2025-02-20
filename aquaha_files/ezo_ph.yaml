@@ -3,6 +3,7 @@ sensor:
     icon: mdi:ph
     name: "pH"
     id: ph_ezo
+    internal: "${hide_ph_module}"
     address: ${ph_address}
     unit_of_measurement: ""
     accuracy_decimals: 2
@@ -32,6 +33,7 @@ sensor:
   - platform: copy
     source_id: ph_ezo
     id: ph_avg
+    internal: "${hide_ph_module}"
     icon: mdi:ph
     name: "pH avg"
     state_class: "measurement"
@@ -47,12 +49,14 @@ text_sensor:
   - platform: template
     name: pH - Result
     id: ph_result
+    internal: "${hide_ph_module}"
     # disabled_by_default: true
 
 button:
   - platform: template
     name: pH - Take reading
     id: ph_read
+    internal: "${hide_ph_module}"
     icon: mdi:read
     entity_category: "Config"
     on_press:
@@ -62,6 +66,7 @@ button:
   - platform: template
     name: pH - Send command
     id: ph_send_command
+    internal: "${hide_ph_module}"
     entity_category: "Config"
     on_press:
       then:
@@ -102,6 +107,7 @@ select:
     name: pH Select Command
     id: ph_select_command
     optimistic: true
+    internal: "${hide_ph_module}"
     # disabled_by_default: true
     entity_category: "Config"
     options:
