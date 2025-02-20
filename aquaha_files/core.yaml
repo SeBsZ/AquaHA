@@ -5,10 +5,6 @@ substitutions:
   do_interval: "60s"
   ec_address: "100"
   ec_interval: "60s"
-  hide_do_module: !lambda return !(${do_module});
-  hide_ph_module: !lambda return !(${ph_module});
-  hide_ec_module: !lambda return !(${ec_module});
-  hide_orp_module: !lambda return !(${orp_module});
 
 esphome:
   on_boot:
@@ -29,22 +25,22 @@ interval:
       - output.turn_off: status_led_1
 
 globals:
-  - id: ph_module
+  - id: hide_ph_module
     type: bool
     restore_value: no
-    initial_value: "${ph_module}"
-  - id: ec_module
+    initial_value: "${hide_ph_module}"
+  - id: hide_ec_module
     type: bool
     restore_value: no
-    initial_value: "${ec_module}"
-  - id: do_module
+    initial_value: "${hide_ec_module}"
+  - id: hide_do_module
     type: bool
     restore_value: no
-    initial_value: "${do_module}"
-  - id: orp_module
+    initial_value: "${hide_do_module}"
+  - id: hide_orp_module
     type: bool
     restore_value: no
-    initial_value: "${orp_module}"
+    initial_value: "${hide_orp_module}"
   
 output:
   - platform: gpio
