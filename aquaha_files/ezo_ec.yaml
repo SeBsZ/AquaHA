@@ -2,7 +2,7 @@ interval:
   - interval: "${ec_interval}"
     then:
       - lambda: |-
-          if (id(ec_module)) {
+          if (!id(hide_ec_module)) {
             id(ec_read).press();
           }
 
@@ -11,6 +11,7 @@ sensor:
     icon: mdi:shaker-outline
     name: "EC-EZO"
     id: ec_ezo
+    internal: "${hide_ec_module}"
     address: ${ec_address}
     unit_of_measurement: "mS/cm"
     accuracy_decimals: 2
@@ -44,6 +45,7 @@ sensor:
   # Conductivity
   - platform: template
     id: sensor_conductivity
+    internal: "${hide_ec_module}"
     unit_of_measurement: "mS/cm"
     icon: mdi:shaker-outline
     name: "Conductivity"
@@ -72,6 +74,7 @@ sensor:
   - platform: template
     name: TDS
     id: sensor_tds
+    internal: "${hide_ec_module}"
     unit_of_measurement: "g/L"
     icon: mdi:water-opacity
     accuracy_decimals: 2
@@ -100,6 +103,7 @@ sensor:
   - platform: template
     name: Salinity
     id: sensor_salinity
+    internal: "${hide_ec_module}"
     icon: mdi:shaker-outline
     unit_of_measurement: "ppt"
     accuracy_decimals: 2
@@ -125,6 +129,7 @@ sensor:
   - platform: copy
     source_id: sensor_salinity
     id: sensor_salinity_avg
+    internal: "${hide_ec_module}"
     icon: mdi:shaker-outline
     name: "Salinity avg"
     unit_of_measurement: "ppt"
@@ -140,6 +145,7 @@ sensor:
   - platform: template
     name: Specific Gravity
     id: sensor_specific_gravity
+    internal: "${hide_ec_module}"
     icon: mdi:cup-water
     unit_of_measurement: ""
     accuracy_decimals: 3
@@ -166,6 +172,7 @@ sensor:
     name: Specific Gravity 1k
     source_id: sensor_specific_gravity
     id: sensor_specific_gravity_1000
+    internal: "${hide_ec_module}"
     accuracy_decimals: 0
     filters:
       - multiply: 1000
@@ -174,6 +181,7 @@ text_sensor:
   - platform: template
     name: EC - Raw
     id: ec_raw_value
+    internal: "${hide_ec_module}"
     icon: mdi:counter
     disabled_by_default: true
     on_value: 
@@ -186,6 +194,7 @@ text_sensor:
     name: EC - Result
     icon: mdi:data-matrix
     id: ec_result
+    internal: "${hide_ec_module}"
     # disabled_by_default: true
 
 button:
@@ -194,6 +203,7 @@ button:
     name: EC - Take reading
     icon: mdi:read
     id: ec_read
+    internal: "${hide_ec_module}"
     entity_category: "Config"
     # disabled_by_default: true
     on_press:
@@ -203,6 +213,7 @@ button:
   - platform: template
     name: EC - Command Send Selected
     id: ec_send_selected
+    internal: "${hide_ec_module}"
     entity_category: "Config"
     # disabled_by_default: true
     on_press:
@@ -291,6 +302,7 @@ select:
   - platform: template
     name: EC - Command Select
     id: select_command_ec
+    internal: "${hide_ec_module}"
     # disabled_by_default: true
     optimistic: true
     entity_category: "Config"
