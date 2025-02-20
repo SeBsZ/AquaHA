@@ -4,10 +4,6 @@ substitutions:
   app_version: "1.0.3"
   internal_temp_address: "0x00"
   external_temp_address: "0x00"
-  ph_module: "true"
-  ec_module: "false"
-  do_module: "true"
-  orp_module: "false"
 
 packages:
   core: !include aquaha_files/core.yaml
