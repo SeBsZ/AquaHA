@@ -4,6 +4,10 @@ substitutions:
   app_version: "1.0.3"
   internal_temp_address: "0x00"
   external_temp_address: "0x00"
+  ph_module: "true"
+  ec_module: "false"
+  do_module: "true"
+  orp_module: "false"
 
 packages:
   core: !include aquaha_files/core.yaml
@@ -16,24 +20,6 @@ packages:
   lights: !include aquaha_files/lights.yaml
   time_scheduler: !include aquaha_files/time_scheduler.yaml
   ultrasonic_distance: !include aquaha_files/ultrasonic_distance.yaml
-
-globals:
-  - id: ph_module
-    type: bool
-    restore_value: no
-    initial_value: 'true'
-  - id: ec_module
-    type: bool
-    restore_value: no
-    initial_value: 'false'
-  - id: do_module
-    type: bool
-    restore_value: no
-    initial_value: 'true'
-  - id: orp_module
-    type: bool
-    restore_value: no
-    initial_value: 'false'
 
 esphome:
   min_version: 2024.6.0
