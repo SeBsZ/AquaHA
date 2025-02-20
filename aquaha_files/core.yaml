@@ -23,6 +23,24 @@ interval:
       - output.turn_on: status_led_1
       - delay: 1000ms
       - output.turn_off: status_led_1
+
+globals:
+  - id: ph_module
+    type: bool
+    restore_value: no
+    initial_value: "${ph_module}"
+  - id: ec_module
+    type: bool
+    restore_value: no
+    initial_value: "${ec_module}"
+  - id: do_module
+    type: bool
+    restore_value: no
+    initial_value: "${do_module}"
+  - id: orp_module
+    type: bool
+    restore_value: no
+    initial_value: "${orp_module}"
   
 output:
   - platform: gpio
