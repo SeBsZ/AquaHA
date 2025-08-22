@@ -70,9 +70,11 @@ binary_sensor:
   - platform: template
     name: "Salinity alarm"
     id: "salinity_alarm"
+    internal: "${hide_salinity_module}"
   - platform: template
     name: "Salinity soft alarm"
     id: "salinity_soft_alarm"
+    internal: "${hide_salinity_module}"
   - platform: template
     name: "Temperature alarm"
     id: "temperature_alarm"
@@ -82,15 +84,19 @@ binary_sensor:
   - platform: template
     name: "pH alarm"
     id: "ph_alarm"
+    internal: "${hide_ph_module}"
   - platform: template
     name: "pH soft alarm"
     id: "ph_soft_alarm"
+    internal: "${hide_ph_module}"
   - platform: template
     name: "Oxygen alarm"
     id: "oxygen_alarm"
+    internal: "${hide_do_module}"
   - platform: template
     name: "Oxygen soft alarm"
     id: "oxygen_soft_alarm"
+    internal: "${hide_do_module}"
   - platform: template
     name: "Active soft alarm"
     id: "active_soft_alarm"
@@ -106,6 +112,7 @@ number:
     optimistic: True
     step: 0.1
     mode: box
+    internal: "${hide_salinity_module}"
   - platform: template
     name: Salinity Threshold High
     id: salinity_threshold_high
@@ -116,6 +123,7 @@ number:
     optimistic: True
     step: 0.1
     mode: box
+    internal: "${hide_salinity_module}"
   - platform: template
     name: pH Threshold Low
     id: ph_threshold_low
@@ -126,6 +134,7 @@ number:
     optimistic: True
     step: 0.1
     mode: box
+    internal: "${hide_ph_module}"
   - platform: template
     name: pH Threshold High
     id: ph_threshold_high
@@ -136,6 +145,7 @@ number:
     optimistic: True
     step: 0.1
     mode: box
+    internal: "${hide_ph_module}"
   - platform: template
     name: Temp Threshold Low
     id: temp_threshold_low
@@ -157,27 +167,6 @@ number:
     step: 0.1
     mode: box
   - platform: template
-    name: Sump Threshold Low
-    id: sump_threshold_low
-    restore_value: True
-    min_value: 0
-    initial_value: 200
-    max_value: 400
-    optimistic: True
-    step: 1
-    mode: box
-  - platform: template
-    name: Sump Threshold High
-    id: sump_threshold_high
-    restore_value: True
-    min_value: 0
-    initial_value: 300
-    max_value: 400
-    optimistic: True
-    step: 1
-    mode: box
-
-  - platform: template
     name: Salinity Soft Low
     id: salinity_soft_low
     min_value: 25
@@ -187,6 +176,7 @@ number:
     optimistic: True
     step: 0.1
     mode: box
+    internal: "${hide_salinity_module}"
   - platform: template
     name: Salinity Soft High
     id: salinity_soft_high
@@ -197,6 +187,7 @@ number:
     optimistic: True
     step: 0.1
     mode: box
+    internal: "${hide_salinity_module}"
   - platform: template
     name: pH Soft Low
     id: ph_soft_low
@@ -207,6 +198,7 @@ number:
     optimistic: True
     step: 0.1
     mode: box
+    internal: "${hide_ph_module}"
   - platform: template
     name: pH Soft High
     id: ph_soft_high
@@ -217,6 +209,7 @@ number:
     optimistic: True
     step: 0.1
     mode: box
+    internal: "${hide_ph_module}"
   - platform: template
     name: Temp Soft Low
     id: temp_soft_low
@@ -236,24 +229,4 @@ number:
     max_value: 30
     optimistic: True
     step: 0.1
-    mode: box
-  - platform: template
-    name: Sump Soft Low
-    id: sump_soft_low
-    restore_value: True
-    min_value: 0
-    initial_value: 200
-    max_value: 600
-    optimistic: True
-    step: 1
-    mode: box
-  - platform: template
-    name: Sump Soft High
-    id: sump_soft_high
-    restore_value: True
-    min_value: 0
-    initial_value: 300
-    max_value: 600
-    optimistic: True
-    step: 1
     mode: box
