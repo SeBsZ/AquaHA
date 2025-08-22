@@ -1,0 +1,122 @@
+interval:
+  - interval: "${orp_interval}"
+    then:
+      - lambda: |-
+          if (!id(hide_orp_module)) {
+            id(orp_read).press();
+          }
+
+sensor:
+  - platform: ezo
+    icon: mdi:react
+    name: "ORP"
+    id: orp_ezo
+    address: ${orp_address}
+    unit_of_measurement: mV
+    accuracy_decimals: 1
+    update_interval: never
+    state_class: "measurement"
+    device_class: voltage
+    internal: "${hide_orp_module}"
+    on_custom: 
+      then:
+        - lambda: 
+            id(orp_result).publish_state(x);
+    on_calibration: 
+      then:
+        - lambda: 
+            id(orp_result).publish_state(x);
+    on_device_information: 
+      then:
+        - lambda: 
+            id(orp_result).publish_state(x);
+    on_slope: 
+      then:
+        - lambda: 
+            id(orp_result).publish_state(x);
+    on_t: 
+      then:
+        - lambda: 
+            id(orp_result).publish_state(x);
+  - platform: copy
+    source_id: orp_ezo
+    id: orp_avg
+    icon: mdi:react
+    name: "ORP Average"
+    state_class: "measurement"
+    device_class: voltage
+    unit_of_measurement: mV
+    internal: "${hide_orp_module}"
+    accuracy_decimals: 1
+    filters:
+      - sliding_window_moving_average: 
+          window_size: 10
+          send_every: 1
+          send_first_at: 1
+
+text_sensor:
+  - platform: template
+    name: ORP - Result
+    internal: "${hide_orp_module}"
+    icon: mdi:data-matrix
+    id: orp_result
+    # disabled_by_default: true
+
+button:
+  - platform: template
+    name: ORP - Take reading
+    id: orp_read
+    icon: mdi:read
+    internal: "${hide_orp_module}"
+    entity_category: "Config"
+    on_press:
+      then:
+        - lambda: |-
+            id(orp_ezo).send_custom("R");
+  - platform: template
+    name: ORP - Send command
+    id: orp_send_command
+    internal: "${hide_orp_module}"
+    entity_category: "Config"
+    on_press:
+      then:
+        - lambda: |-
+            if (id(orp_select_command).state == "Read") {
+              id(orp_ezo).send_custom("R");
+            }
+            if (id(orp_select_command).state == "Information") {
+              id(orp_ezo).get_device_information();
+            }
+            if (id(orp_select_command).state == "Status") {
+              id(orp_ezo).send_custom("Status");
+            }
+            if (id(orp_select_command).state == "Check Calibration") {
+              id(orp_ezo).get_calibration();
+            }  
+            if (id(orp_select_command).state == "Calibrate @ 225mV") {
+              id(orp_ezo).send_custom("Cal,225");
+            }
+            if (id(orp_select_command).state == "CLEAR Calibration") {
+              id(orp_ezo).clear_calibration();
+            }
+
+select:
+  - platform: template
+    name: ORP Select Command
+    id: orp_select_command
+    optimistic: true
+    internal: "${hide_orp_module}"
+    # disabled_by_default: true
+    entity_category: "Config"
+    options:
+      - "Read"
+      - "Information"
+      - "Status"
+      - "Check Calibration"
+      - "Calibrate @ 225mV"
+      - "CLEAR Calibration"
+    initial_option: "Check Calibration"
+    set_action:
+      - logger.log:
+          format: "Chosen option: %s"
+          args: ["x.c_str()"]
