@@ -16,6 +16,7 @@ packages:
   ezo_ph: !include aquaha_files/ezo_ph.yaml
   ezo_ec: !include aquaha_files/ezo_ec.yaml
   ezo_do: !include aquaha_files/ezo_do.yaml
+  ezo_orp: !include aquaha_files/ezo_orp.yaml
   heating: !include aquaha_files/heating.yaml
   lights: !include aquaha_files/lights.yaml
   time_scheduler: !include aquaha_files/time_scheduler.yaml
@@ -54,3 +55,4 @@ wifi:
     password: "aquaHAaquaHA"
 
 captive_portal:
+
