@@ -5,6 +5,8 @@ substitutions:
   do_interval: "60s"
   ec_address: "100"
   ec_interval: "60s"
+  orp_address: "98"
+  orp_interval: "60s"
 
 esphome:
   on_boot:
