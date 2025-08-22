@@ -60,6 +60,9 @@ text_sensor:
     internal: "${hide_orp_module}"
     icon: mdi:data-matrix
     id: orp_result
+    on_value: 
+      then:
+        - component.update: orp_ezo
     # disabled_by_default: true
 
 button:
