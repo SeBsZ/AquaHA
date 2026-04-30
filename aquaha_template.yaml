@@ -21,6 +21,7 @@ esphome:
 
 esp32:
   board: nodemcu-32s
+  cpu_frequency: 160MHZ
   framework:
     type: arduino
 
