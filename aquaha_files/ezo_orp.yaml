@@ -84,22 +84,22 @@ button:
     on_press:
       then:
         - lambda: |-
-            if (id(orp_select_command).state == "Read") {
+            if (id(orp_select_command).current_option() == "Read") {
               id(orp_ezo).send_custom("R");
             }
-            if (id(orp_select_command).state == "Information") {
+            if (id(orp_select_command).current_option() == "Information") {
               id(orp_ezo).get_device_information();
             }
-            if (id(orp_select_command).state == "Status") {
+            if (id(orp_select_command).current_option() == "Status") {
               id(orp_ezo).send_custom("Status");
             }
-            if (id(orp_select_command).state == "Check Calibration") {
+            if (id(orp_select_command).current_option() == "Check Calibration") {
               id(orp_ezo).get_calibration();
             }  
-            if (id(orp_select_command).state == "Calibrate @ 225mV") {
+            if (id(orp_select_command).current_option() == "Calibrate @ 225mV") {
               id(orp_ezo).send_custom("Cal,225");
             }
-            if (id(orp_select_command).state == "CLEAR Calibration") {
+            if (id(orp_select_command).current_option() == "CLEAR Calibration") {
               id(orp_ezo).clear_calibration();
             }
 

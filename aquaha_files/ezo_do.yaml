@@ -97,10 +97,8 @@ button:
     on_press:
       - lambda: |-
           if (!id(hide_do_module)) {
-            byte error;
-            Wire.beginTransmission(${do_address});
-            error = Wire.endTransmission();
-            if (error == 0) {
+            auto error = id(bus_a)->write(${do_address}, nullptr, 0);
+            if (error == i2c::ERROR_OK) {
               id(do_ezo).send_custom("S,35.0,ppt");
               ESP_LOGW("custom_do_read", "Set 35ppt DO salinity compensation.");
             }
@@ -114,10 +112,8 @@ button:
     on_press:
       - lambda: |-
           if (!id(hide_do_module)) {
-            byte error;
-            Wire.beginTransmission(${do_address});
-            error = Wire.endTransmission();
-            if (error == 0) {
+            auto error = id(bus_a)->write(${do_address}, nullptr, 0);
+            if (error == i2c::ERROR_OK) {
               id(do_ezo).send_custom("S,0.0,ppt");
               ESP_LOGW("custom_dissolvedoxygen_read", "Reset DO salinity compensation.");
             }
@@ -143,49 +139,49 @@ button:
     on_press:
       then:
         - lambda: |-
-            if (id(do_select_command).state == "Read") {
+            if (id(do_select_command).current_option() == "Read") {
               id(do_ezo).send_custom("R");
             }
-            if (id(do_select_command).state == "Information") {
+            if (id(do_select_command).current_option() == "Information") {
               id(do_ezo).get_device_information();
             }
-            if (id(do_select_command).state == "Status") {
+            if (id(do_select_command).current_option() == "Status") {
               id(do_ezo).send_custom("Status");
             }
-            if (id(do_select_command).state == "Get Enabled Parameter(s)") {
+            if (id(do_select_command).current_option() == "Get Enabled Parameter(s)") {
               id(do_ezo).send_custom("O,?");
             }  
-            if (id(do_select_command).state == "Output Units - All (Default)") {
+            if (id(do_select_command).current_option() == "Output Units - All (Default)") {
               id(do_ezo).send_custom("O,mg,1");
               id(do_ezo).send_custom("O,%,1");
             }
-            if (id(do_select_command).state == "Output Units - % Saturation") {
+            if (id(do_select_command).current_option() == "Output Units - % Saturation") {
               id(do_ezo).send_custom("O,mg,0");
               id(do_ezo).send_custom("O,%,1");
             }
-            if (id(do_select_command).state == "Output Units - mg/L") {
+            if (id(do_select_command).current_option() == "Output Units - mg/L") {
               id(do_ezo).send_custom("O,mg,1");
               id(do_ezo).send_custom("O,%,0");
             }
-            if (id(do_select_command).state == "Check Calibration") {
+            if (id(do_select_command).current_option() == "Check Calibration") {
               id(do_ezo).get_calibration();
             }  
-            if (id(do_select_command).state == "Calibrate @ Air") {
+            if (id(do_select_command).current_option() == "Calibrate @ Air") {
               id(do_ezo).send_custom("Cal");
             }
-            if (id(do_select_command).state == "Calibrate @ 0%") {
+            if (id(do_select_command).current_option() == "Calibrate @ 0%") {
               id(do_ezo).send_custom("Cal,0");
             }
-            if (id(do_select_command).state == "CLEAR Calibration") {
+            if (id(do_select_command).current_option() == "CLEAR Calibration") {
               id(do_ezo).clear_calibration();
             }
-            if (id(do_select_command).state == "Salinity Compensation Value") {
+            if (id(do_select_command).current_option() == "Salinity Compensation Value") {
               id(do_ezo).send_custom("S,?");
             }
-            if (id(do_select_command).state == "Clear Salinity Compensation") {
+            if (id(do_select_command).current_option() == "Clear Salinity Compensation") {
               id(do_ezo).send_custom("S,0.0,ppt");
             }
-            if (id(do_select_command).state == "Set Salinity Compensation @ 35ppt") {
+            if (id(do_select_command).current_option() == "Set Salinity Compensation @ 35ppt") {
               id(do_ezo).send_custom("S,35.0,ppt");
             }
             // else {

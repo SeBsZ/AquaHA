@@ -71,34 +71,34 @@ button:
     on_press:
       then:
         - lambda: |-
-            if (id(ph_select_command).state == "Read") {
+            if (id(ph_select_command).current_option() == "Read") {
               id(ph_ezo).send_custom("R");
             }
-            if (id(ph_select_command).state == "Information") {
+            if (id(ph_select_command).current_option() == "Information") {
               id(ph_ezo).get_device_information();
             }
-            if (id(ph_select_command).state == "Status") {
+            if (id(ph_select_command).current_option() == "Status") {
               id(ph_ezo).send_custom("Status");
             }
-            if (id(ph_select_command).state == "Get Slope") {
+            if (id(ph_select_command).current_option() == "Get Slope") {
               id(ph_ezo).get_slope();
             }
-            if (id(ph_select_command).state == "Check Calibration") {
+            if (id(ph_select_command).current_option() == "Check Calibration") {
               id(ph_ezo).get_calibration();
             }  
-            if (id(ph_select_command).state == "CLEAR Calibration") {
+            if (id(ph_select_command).current_option() == "CLEAR Calibration") {
               id(ph_ezo).clear_calibration();
             }
-            if (id(ph_select_command).state == "Calibrate pH 4") {
+            if (id(ph_select_command).current_option() == "Calibrate pH 4") {
               id(ph_ezo).set_calibration_point_low(4.00);
             }
-            if (id(ph_select_command).state == "Calibrate pH 7") {
+            if (id(ph_select_command).current_option() == "Calibrate pH 7") {
               id(ph_ezo).set_calibration_point_mid(7.00);
             }
-            if (id(ph_select_command).state == "Calibrate pH 9") {
+            if (id(ph_select_command).current_option() == "Calibrate pH 9") {
               id(ph_ezo).set_calibration_point_high(9.00);
             }
-            if (id(ph_select_command).state == "Calibrate pH 10") {
+            if (id(ph_select_command).current_option() == "Calibrate pH 10") {
               id(ph_ezo).set_calibration_point_high(10.00);
             }
 

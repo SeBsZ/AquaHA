@@ -474,58 +474,58 @@ script:
 
         // Define the 8 setpoints and their corresponding brightness levels
         const int time_setpoints[8] = {
-            atoi(id(setpoint1_hour).state.c_str()) * 60 + atoi(id(setpoint1_minute).state.c_str()),
-            atoi(id(setpoint2_hour).state.c_str()) * 60 + atoi(id(setpoint2_minute).state.c_str()),
-            atoi(id(setpoint3_hour).state.c_str()) * 60 + atoi(id(setpoint3_minute).state.c_str()),
-            atoi(id(setpoint4_hour).state.c_str()) * 60 + atoi(id(setpoint4_minute).state.c_str()),
-            atoi(id(setpoint5_hour).state.c_str()) * 60 + atoi(id(setpoint5_minute).state.c_str()),
-            atoi(id(setpoint6_hour).state.c_str()) * 60 + atoi(id(setpoint6_minute).state.c_str()),
-            atoi(id(setpoint7_hour).state.c_str()) * 60 + atoi(id(setpoint7_minute).state.c_str()),
-            atoi(id(setpoint8_hour).state.c_str()) * 60 + atoi(id(setpoint8_minute).state.c_str())
+            atoi(id(setpoint1_hour).current_option().c_str()) * 60 + atoi(id(setpoint1_minute).current_option().c_str()),
+            atoi(id(setpoint2_hour).current_option().c_str()) * 60 + atoi(id(setpoint2_minute).current_option().c_str()),
+            atoi(id(setpoint3_hour).current_option().c_str()) * 60 + atoi(id(setpoint3_minute).current_option().c_str()),
+            atoi(id(setpoint4_hour).current_option().c_str()) * 60 + atoi(id(setpoint4_minute).current_option().c_str()),
+            atoi(id(setpoint5_hour).current_option().c_str()) * 60 + atoi(id(setpoint5_minute).current_option().c_str()),
+            atoi(id(setpoint6_hour).current_option().c_str()) * 60 + atoi(id(setpoint6_minute).current_option().c_str()),
+            atoi(id(setpoint7_hour).current_option().c_str()) * 60 + atoi(id(setpoint7_minute).current_option().c_str()),
+            atoi(id(setpoint8_hour).current_option().c_str()) * 60 + atoi(id(setpoint8_minute).current_option().c_str())
         };
 
         const float brightness_levels1[8] = {
-            static_cast<float>(atof(id(setpoint1_brightness1).state.c_str())),
-            static_cast<float>(atof(id(setpoint2_brightness1).state.c_str())),
-            static_cast<float>(atof(id(setpoint3_brightness1).state.c_str())),
-            static_cast<float>(atof(id(setpoint4_brightness1).state.c_str())),
-            static_cast<float>(atof(id(setpoint5_brightness1).state.c_str())),
-            static_cast<float>(atof(id(setpoint6_brightness1).state.c_str())),
-            static_cast<float>(atof(id(setpoint7_brightness1).state.c_str())),
-            static_cast<float>(atof(id(setpoint8_brightness1).state.c_str()))
+            static_cast<float>(atof(id(setpoint1_brightness1).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint2_brightness1).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint3_brightness1).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint4_brightness1).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint5_brightness1).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint6_brightness1).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint7_brightness1).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint8_brightness1).current_option().c_str()))
         };
 
         const float brightness_levels2[8] = {
-            static_cast<float>(atof(id(setpoint1_brightness2).state.c_str())),
-            static_cast<float>(atof(id(setpoint2_brightness2).state.c_str())),
-            static_cast<float>(atof(id(setpoint3_brightness2).state.c_str())),
-            static_cast<float>(atof(id(setpoint4_brightness2).state.c_str())),
-            static_cast<float>(atof(id(setpoint5_brightness2).state.c_str())),
-            static_cast<float>(atof(id(setpoint6_brightness2).state.c_str())),
-            static_cast<float>(atof(id(setpoint7_brightness2).state.c_str())),
-            static_cast<float>(atof(id(setpoint8_brightness2).state.c_str()))
+            static_cast<float>(atof(id(setpoint1_brightness2).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint2_brightness2).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint3_brightness2).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint4_brightness2).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint5_brightness2).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint6_brightness2).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint7_brightness2).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint8_brightness2).current_option().c_str()))
         };
 
         const float brightness_levels3[8] = {
-            static_cast<float>(atof(id(setpoint1_brightness3).state.c_str())),
-            static_cast<float>(atof(id(setpoint2_brightness3).state.c_str())),
-            static_cast<float>(atof(id(setpoint3_brightness3).state.c_str())),
-            static_cast<float>(atof(id(setpoint4_brightness3).state.c_str())),
-            static_cast<float>(atof(id(setpoint5_brightness3).state.c_str())),
-            static_cast<float>(atof(id(setpoint6_brightness3).state.c_str())),
-            static_cast<float>(atof(id(setpoint7_brightness3).state.c_str())),
-            static_cast<float>(atof(id(setpoint8_brightness3).state.c_str()))
+            static_cast<float>(atof(id(setpoint1_brightness3).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint2_brightness3).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint3_brightness3).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint4_brightness3).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint5_brightness3).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint6_brightness3).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint7_brightness3).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint8_brightness3).current_option().c_str()))
         };
 
         const float brightness_levels4[8] = {
-            static_cast<float>(atof(id(setpoint1_brightness4).state.c_str())),
-            static_cast<float>(atof(id(setpoint2_brightness4).state.c_str())),
-            static_cast<float>(atof(id(setpoint3_brightness4).state.c_str())),
-            static_cast<float>(atof(id(setpoint4_brightness4).state.c_str())),
-            static_cast<float>(atof(id(setpoint5_brightness4).state.c_str())),
-            static_cast<float>(atof(id(setpoint6_brightness4).state.c_str())),
-            static_cast<float>(atof(id(setpoint7_brightness4).state.c_str())),
-            static_cast<float>(atof(id(setpoint8_brightness4).state.c_str()))
+            static_cast<float>(atof(id(setpoint1_brightness4).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint2_brightness4).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint3_brightness4).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint4_brightness4).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint5_brightness4).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint6_brightness4).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint7_brightness4).current_option().c_str())),
+            static_cast<float>(atof(id(setpoint8_brightness4).current_option().c_str()))
         };
 
         // Default brightness (fallback)
