@@ -1,0 +1,102 @@
+# =============================================================================
+# AquaHA Hardware Test
+# =============================================================================
+# Minimal config to isolate hardware vs software issues.
+# Strips out everything except:
+#   - GPIO17 status LED (blinks every 1s on/off, visible without HA)
+#   - 4 relays as plain GPIO switches (toggle manually from HA / web UI)
+#   - The EZO power-enable pin (so you can manually flip it if needed)
+#   - WiFi/API/OTA so you can flash and observe
+#
+# Flash this in place of aquaha_config.yaml, observe the behaviour, then
+# revert to the normal config once we know more.
+# =============================================================================
+
+substitutions:
+  name: "aquaha"
+  friendly_name: "AquaHA Test"
+  app_version: "test-1"
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  name_add_mac_suffix: true
+  comment: "AquaHA - Hardware test build"
+  project:
+    name: "sebsz.aquaha"
+    version: "${app_version}"
+
+esp32:
+  board: esp32dev
+  cpu_frequency: 160MHZ
+  framework:
+    type: arduino
+
+api:
+ota:
+  platform: esphome
+
+logger:
+  level: DEBUG
+
+# NOTE: Same wifi block as aquaha_template.yaml.
+# Your real STA credentials must be supplied the same way you currently
+# do it (ESPHome dashboard / secrets) - this just keeps the AP fallback.
+wifi:
+  ap:
+    password: "aquaHAaquaHA"
+
+captive_portal:
+
+web_server:
+  port: 80
+  version: "3"
+
+# -----------------------------------------------------------------------------
+# Heartbeat: blink GPIO17 every second.
+# If this LED does NOT blink, GPIO output is fundamentally broken.
+# -----------------------------------------------------------------------------
+output:
+  - platform: gpio
+    id: status_led_1
+    pin:
+      number: GPIO17
+      mode: output
+
+interval:
+  - interval: 1000ms
+    then:
+      - output.turn_on: status_led_1
+      - delay: 500ms
+      - output.turn_off: status_led_1
+      - logger.log: "heartbeat"
+
+# -----------------------------------------------------------------------------
+# Plain GPIO switches - toggle these from HA or the web UI to test relays.
+# A working relay should audibly click when toggled.
+# -----------------------------------------------------------------------------
+switch:
+  - platform: gpio
+    id: disable_iso
+    name: "Disable EZO module power"
+    pin: GPIO4
+  - platform: gpio
+    id: relay_1
+    name: "Test Relay 1"
+    pin: GPIO13
+  - platform: gpio
+    id: relay_2
+    name: "Test Relay 2"
+    pin: GPIO14
+  - platform: gpio
+    id: relay_3
+    name: "Test Relay 3"
+    pin: GPIO25
+  - platform: gpio
+    id: relay_4
+    name: "Test Relay 4"
+    pin: GPIO16
+
+button:
+  - platform: restart
+    name: "Restart device"
